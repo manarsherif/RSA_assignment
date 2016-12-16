@@ -109,17 +109,37 @@ public class Bank {
 				System.out.println("2. Loans account");
 				String acount_type =scanner.nextLine();
 				System.out.println("Please enter the customer's social security number");
-				String cssn =scanner.nextLine();
-				//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+				String cssn =scanner.nextLine();//must be an existing customer
+				String query ="SELECT * FROM Customer WHERE SSN="+cssn;
+				ResultSet rs=stmt.executeQuery(query);
+				if(! rs.next())//not a customer then takes his/her data and add him/her to customers 
+				{
+					System.out.println("Please enter the customer's full name");
+					String name=scanner.nextLine();
+					System.out.println("Please enter the customer's phone number");
+					String phone=scanner.nextLine();
+					System.out.println("Please enter the customer's address");
+					String address=scanner.nextLine();
+					query="INSERT INTO Customer (SSN, CNAME, CPhone, CAddress) VALUES ('"+cssn+"','"+ name+"', '"+phone+"', '"+address+"');";
+					System.out.println("Welcome to our bank Mr/Mrs"+name);
+					stmt.execute(query);
+				}
 				String date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
-				String query="";
 				switch(acount_type)
 				{
 				case "1"://savings account
-					query = "INSERT INTO Account (AccNumber, AccBalance, BrID, CSSN, AType, Since)VALUES ("+Integer.toString(account_number)+","+balance+",2,"+cssn+", 0,"+date+");";
-					System.out.println(query);
+					//query = "INSERT INTO Account (AccNumber, AccBalance, BrID, CSSN, AType, Since)VALUES ("+Integer.toString(account_number)+","+balance+",2,"+cssn+", 0,"+date+");";
+					PreparedStatement pst = (PreparedStatement) con.prepareStatement("INSERT INTO Account (AccNumber, AccBalance, BrID, CSSN, AType, Since)VALUES (?,?,?,?,?,?);");
+					pst.setString(1, Integer.toString(account_number));
+					pst.setString(2, balance);
+					pst.setString(3, "2");
+					pst.setString(4, cssn);
+					pst.setString(5, "0");
+					pst.setString(6, date);
+					//System.out.println(query);
 					//PreparedStatement preparedStmt = (PreparedStatement) con.prepareStatement(query);
-					stmt.execute(query);
+					//stmt.execute(query);
+					pst.executeUpdate();
 					System.out.println("account is added successfuly");
 					break;
 				case "2"://loan account 
