@@ -6,8 +6,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Scanner;
 
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 public class Bank {
@@ -15,10 +17,11 @@ public class Bank {
 	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 		Statement stmt = null;
+		Connection con = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			try {
-				Connection con=(Connection)DriverManager.getConnection("jdbc:mysql://localhost:3306/banking_system","root","1234");
+				con=(Connection)DriverManager.getConnection("jdbc:mysql://localhost:3306/banking_system","root","1234");
 				stmt=(Statement) con.createStatement();
 				//System.out.println("connection succeded");
 			} catch (SQLException e) {
@@ -107,13 +110,15 @@ public class Bank {
 				String acount_type =scanner.nextLine();
 				System.out.println("Please enter the customer's social security number");
 				String cssn =scanner.nextLine();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-				String date=sdf.toString();
+				//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+				String date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
 				String query="";
 				switch(acount_type)
 				{
 				case "1"://savings account
 					query = "INSERT INTO Account (AccNumber, AccBalance, BrID, CSSN, AType, Since)VALUES ("+Integer.toString(account_number)+","+balance+",2,"+cssn+", 0,"+date+");";
+					System.out.println(query);
+					//PreparedStatement preparedStmt = (PreparedStatement) con.prepareStatement(query);
 					stmt.execute(query);
 					System.out.println("account is added successfuly");
 					break;
