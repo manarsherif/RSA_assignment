@@ -21,15 +21,16 @@ public class AccountManager {
 		this.stmt=stmt;
 		this.con=con;
 	}
-	public void addNewAccount(String balance,String cssn,String Account_type,String br_id) throws SQLException
+	public boolean addNewAccount(String balance,String cssn,String Account_type,String br_id) throws SQLException
 	{
 		int account_number=(int)(Math.random()*999999);
 		String query ="SELECT * FROM Customer WHERE SSN="+cssn;
 		ResultSet rs=stmt.executeQuery(query);
 		if(! rs.next())//not a customer then takes his/her data and add him/her to customers 
 		{
-			CustomerManager cm= new CustomerManager(stmt, con);
-			cm.addNewCustomer(cssn, name, phone, address);
+			//CustomerManager cm= new CustomerManager(stmt, con);
+			//cm.addNewCustomer(cssn, name, phone, address);
+			return false;
 		}
 		String date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
 		PreparedStatement pst = (PreparedStatement) con.prepareStatement("INSERT INTO Account (AccNumber, AccBalance, BrID, CSSN, AType, Since)VALUES (?,?,?,?,?,?);");
@@ -41,6 +42,7 @@ public class AccountManager {
 		pst.setString(6, date);
 		pst.executeUpdate();
 		System.out.println("account is added successfuly");
+		return true;
 	}
 	
 
