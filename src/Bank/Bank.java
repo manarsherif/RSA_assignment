@@ -31,8 +31,7 @@ public class Bank {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		while(true)
-		{
+		
 			System.out.println("Please choose one of the following operations");
 			System.out.println("1. Do a transaction");
 			System.out.println("2. Add a new account");
@@ -47,56 +46,16 @@ public class Bank {
 				System.out.println("please enter the transaction Type");
 				System.out.println("1. Withdraw");
 				System.out.println("2. Deposit");
+				Transactions trans=new Transactions(stmt,con);
 				String input2=scanner.nextLine();
 				switch (input2)
 				{
 				case "1"://withdraw
-					System.out.println("please enter the amount you want to withdraw");
-					float amount = Float.parseFloat(scanner.nextLine());
-					System.out.println("please enter account number");
-					String account_number=scanner.nextLine();
-					String query ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number+";";
-					ResultSet rs=stmt.executeQuery(query);
-					if(rs.next())
-					{
-						float balance =Float.parseFloat(rs.getString("AccBalance"));
-						if(amount>balance)
-							System.out.println("You don't have enough money in your accont");
-						else
-						{
-							balance=balance-amount;
-							query="UPDATE Account SET AccBalance="+Float.toString(balance)+"WHERE AccNumber="+account_number+";";
-							stmt.execute(query);
-							System.out.println("Withdrawal succeded");
-						}
-					}
-					else
-					{
-						System.out.println("You entered a non exisiting account");
-						System.out.println("Abort");
-					}
+					trans.withdraw();
 					break;
 				case "2"://deposit
-					System.out.println("please enter the amount you want to Deposit");
-					float amount1 = Float.parseFloat(scanner.nextLine());
-					System.out.println("please enter account number");
-					String account_number1=scanner.nextLine();
-					String query1 ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number1+";";
-					ResultSet rs1=stmt.executeQuery(query1);
-					if(rs1.next())
-					{
-						float balance =Float.parseFloat(rs1.getString("AccBalance"));
-						balance=balance+amount1;
-						query1="UPDATE Account SET AccBalance="+Float.toString(balance)+"WHERE AccNumber="+account_number1+";";
-						stmt.execute(query1);
-						System.out.println("Deposit succeded");	
-					}
-					else
-					{
-						System.out.println("You entered a non exisiting account");
-						System.out.println("Abort");
-					}
-					
+					trans.deposit();
+					break;
 				}
 				break;
 			case "2"://review a customer's account
@@ -153,6 +112,6 @@ public class Bank {
 			scanner.close();
 		}
 			
-		}
+		
 
 }
