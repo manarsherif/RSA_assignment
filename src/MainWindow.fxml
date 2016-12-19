@@ -58,7 +58,7 @@
                   <Font size="18.0" />
                </font>
             </TextField>
-            <ComboBox fx:id="type" promptText="Employee Type">
+            <ComboBox fx:id="type" promptText="Job Title">
                <VBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
                </VBox.margin>

@@ -1,14 +1,10 @@
 package application;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import com.mysql.jdbc.Statement;
-
+import Bank.BankManager;
+import Bank.EmpManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import extras.Alerts;
 import extras.Constants;;
 
 public class MainController implements Initializable {
@@ -41,41 +38,41 @@ public class MainController implements Initializable {
 	
 	
 	public void Login(ActionEvent event) {
-		
+		if(user.getText().isEmpty())
+		{
+			Alerts.createWarningAlert("Please Enter Your Name");
+		}
+		else if(pass.getText().isEmpty())
+		{
+			Alerts.createWarningAlert("Please Enter Your Password");
+		}
+		else if(type.getSelectionModel().getSelectedIndex() < 0)
+		{
+			Alerts.createWarningAlert("Please Enter Your Job Title");
+		}
+		else
+		{
+			EmpManager empManagerInstance = EmpManager.getEmpManagerInstance();
+			boolean loginSuccess = empManagerInstance.checkEmpLogin(user.getText(), 
+					pass.getText(), type.getValue());
+			
+			if(loginSuccess == false)
+			{
+				Alerts.createWarningAlert("Wrong Employee Name, Password, or Title");
+			}
+			else
+			{
+				// TODO
+			}
+		}
 	}
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		type.setItems(EmpTypes);
-		
-		Statement stmt = null;
-		Connection con = null;
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			try {
-				con=(Connection)DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PASS);
-				stmt=(Statement) con.createStatement();
-				//System.out.println("connection succeded");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String query ="SELECT * FROM Bank WHERE BankID="+Constants.BANKID;
-		
-		try {
-			ResultSet res = stmt.executeQuery(query);
-			if(res.next())
-			{
-				String name = String.valueOf(res.getString(Constants.BankTable.BankName));
-				bank_name.setText(name);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		BankManager bankInstance = BankManager.getBankManagerInstance();
+		String BankName = bankInstance.getBankName(Constants.BANKID);
+		bank_name.setText(BankName);
 	}
 }
