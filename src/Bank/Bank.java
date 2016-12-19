@@ -1,7 +1,6 @@
 package Bank;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -151,6 +150,7 @@ public class Bank {
 			case "5":
 				break;
 			}
+			scanner.close();
 		}
 			
 		}
