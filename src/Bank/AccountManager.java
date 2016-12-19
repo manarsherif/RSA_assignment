@@ -21,23 +21,15 @@ public class AccountManager {
 		this.stmt=stmt;
 		this.con=con;
 	}
-	public void addNewAccount(String Account_type,String br_id) throws SQLException
+	public void addNewAccount(String balance,String cssn,String Account_type,String br_id) throws SQLException
 	{
 		int account_number=(int)(Math.random()*999999);
-		System.out.println("Please enter the starting balance of the account");
-		String balance = scanner.nextLine();
-		//System.out.println("Please enter the type of the acount");
-		//System.out.println("1. Savings account");
-		//System.out.println("2. Loans account");
-		//String acount_type =scanner.nextLine();
-		System.out.println("Please enter the customer's social security number");
-		String cssn =scanner.nextLine();//must be an existing customer
 		String query ="SELECT * FROM Customer WHERE SSN="+cssn;
 		ResultSet rs=stmt.executeQuery(query);
 		if(! rs.next())//not a customer then takes his/her data and add him/her to customers 
 		{
 			CustomerManager cm= new CustomerManager(stmt, con);
-			cm.addNewCustomer(cssn);
+			cm.addNewCustomer(cssn, name, phone, address);
 		}
 		String date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
 		PreparedStatement pst = (PreparedStatement) con.prepareStatement("INSERT INTO Account (AccNumber, AccBalance, BrID, CSSN, AType, Since)VALUES (?,?,?,?,?,?);");

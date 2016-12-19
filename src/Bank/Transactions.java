@@ -19,12 +19,9 @@ public class Transactions {
 		this.con=con;
 	}
 	
-	public void withdraw() throws SQLException
+	public void withdraw(float amount,String account_number ) throws SQLException
 	{
-		System.out.println("please enter the amount you want to withdraw");
-		float amount = Float.parseFloat(scanner.nextLine());
-		System.out.println("please enter account number");
-		String account_number=scanner.nextLine();
+		
 		String query ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number+";";
 		ResultSet rs=stmt.executeQuery(query);
 		if(rs.next())
@@ -54,12 +51,9 @@ public class Transactions {
 			System.out.println("Abort");
 		}	
 	}
-	public void deposit() throws SQLException
+	public void deposit(float amount1,String account_number1) throws SQLException
 	{
-		System.out.println("please enter the amount you want to Deposit");
-		float amount1 = Float.parseFloat(scanner.nextLine());
-		System.out.println("please enter account number");
-		String account_number1=scanner.nextLine();
+		
 		String query1 ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number1+";";
 		ResultSet rs1=stmt.executeQuery(query1);
 		if(rs1.next())
@@ -69,7 +63,6 @@ public class Transactions {
 			query1="UPDATE Account SET AccBalance="+Float.toString(balance)+"WHERE AccNumber="+account_number1+";";
 			stmt.execute(query1);
 			query1 ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number1+";";
-			//System.out.println(query);
 			rs1=stmt.executeQuery(query1);
 			if(rs1.next())
 			{

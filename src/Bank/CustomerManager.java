@@ -17,14 +17,8 @@ public class CustomerManager {
 		this.stmt=stmt;
 		this.con=con;
 	}
-	public void addNewCustomer(String cssn) throws SQLException
+	public void addNewCustomer(String cssn,String name,String phone,String address) throws SQLException
 	{
-		System.out.println("Please enter the customer's full name");
-		String name=scanner.nextLine();
-		System.out.println("Please enter the customer's phone number");
-		String phone=scanner.nextLine();
-		System.out.println("Please enter the customer's address");
-		String address=scanner.nextLine();
 		String query="INSERT INTO Customer (SSN, CNAME, CPhone, CAddress) VALUES ('"+cssn+"','"+ name+"', '"+phone+"', '"+address+"');";
 		System.out.println("Welcome to our bank Mr/Mrs"+name);
 		stmt.execute(query);
