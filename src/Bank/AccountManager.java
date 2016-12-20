@@ -1,39 +1,65 @@
 package Bank;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Scanner;
 
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
+import extras.Constants;
+import extras.Constants.AccountTable;
+import extras.Constants.CustomerTable;
+
 public class AccountManager {
-	private Scanner scanner ;
+	private static AccountManager accountManagerInstance = null;
 	private Statement stmt;
-	private Connection con;
-	public AccountManager(Statement stmt,Connection con)
-	{
-		// TODO Auto-generated constructor stub
-		this.scanner=new Scanner(System.in);
-		this.stmt=stmt;
-		this.con=con;
+	private Connection conn;
+
+	private AccountManager() {
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = (Connection) DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PASS);
+			stmt = (Statement) 	conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
+	
+	public static AccountManager getAccountManagerInstance() {
+		if(accountManagerInstance == null)
+		{
+			accountManagerInstance = new AccountManager();
+		}
+		return accountManagerInstance;
+	}
+	
 	public boolean addNewAccount(String balance,String cssn,String Account_type,String br_id) throws SQLException
 	{
 		int account_number=(int)(Math.random()*999999);
-		String query ="SELECT * FROM Customer WHERE SSN="+cssn;
+		String query ="SELECT *"
+				+ " FROM " + CustomerTable.CustomerTable 
+				+ " WHERE " + CustomerTable.SSN + "='" + cssn + "'";
 		ResultSet rs=stmt.executeQuery(query);
 		if(! rs.next())//not a customer then takes his/her data and add him/her to customers 
 		{
-			//CustomerManager cm= new CustomerManager(stmt, con);
+			//CustomerManager cm= new CustomerManager(stmt, conn);
 			//cm.addNewCustomer(cssn, name, phone, address);
 			return false;
 		}
 		String date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
-		PreparedStatement pst = (PreparedStatement) con.prepareStatement("INSERT INTO Account (AccNumber, AccBalance, BrID, CSSN, AType, Since)VALUES (?,?,?,?,?,?);");
+		PreparedStatement pst = (PreparedStatement) conn.prepareStatement(
+						"INSERT INTO " + AccountTable.AccountTable + " ("
+						+AccountTable.AccountNumber+", "+AccountTable.Balance
+						+", "+AccountTable.BranchID+", "+AccountTable.CustomerSSN
+						+", "+AccountTable.AccountType+", "+AccountTable.AccountSince
+						+")VALUES (?,?,?,?,?,?);");
+		
 		pst.setString(1, Integer.toString(account_number));
 		pst.setString(2, balance);
 		pst.setString(3, br_id);

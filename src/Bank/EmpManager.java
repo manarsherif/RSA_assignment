@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import com.mysql.jdbc.Statement;
 
 import extras.Constants;
+import extras.Constants.DeptBranchTable;
 import extras.Constants.EmpTable;
 
 public class EmpManager {
@@ -37,22 +38,24 @@ public class EmpManager {
 		return empManagerInstance;
 	}
 	
-	public boolean checkEmpLogin(String name, String pass, String type) {
-		String query = "SELECT *"
-				+ " FROM " + EmpTable.EmpTable
+	public int checkEmpLogin(String name, String pass, String type) {
+		String query = "SELECT " + DeptBranchTable.BranchID
+				+ " FROM " + EmpTable.EmpTable + ", " + DeptBranchTable.DeptBranchTable
 				+ " WHERE " + EmpTable.EmpName + "=" + "'" + name + "'"
 				+ " AND " + EmpTable.EmpSSN + "=" + "'" + pass + "'"
-				+ " AND " + EmpTable.EmpType + "=" + "'" + type + "'";
+				+ " AND " + EmpTable.EmpType + "=" + "'" + type + "'"
+				+ " AND " + EmpTable.EmpDepartmentID + "=" + DeptBranchTable.DepartmentID;
 		
 		try {
 			ResultSet res = stmt.executeQuery(query);
 			if(res.next())
 			{
-				return true;
+				int BranchID = Integer.parseUnsignedInt(res.getString(DeptBranchTable.BranchID));
+				return BranchID;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return -1;
 	}
 }

@@ -1,22 +1,37 @@
 package Bank;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 import com.mysql.jdbc.Statement;
 
-public class Transactions {
-	private Scanner scanner ;
+import extras.Constants;
+
+public class TransactionsManager {
+	private static TransactionsManager transactionsManagerInstance = null;
 	private Statement stmt;
-	private Connection con;
+	private Connection conn;
+
+	private TransactionsManager() {
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = (Connection) DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PASS);
+			stmt = (Statement) 	conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
-	Transactions(Statement stmt,Connection con)
-	{
-		this.scanner=new Scanner(System.in);
-		this.stmt=stmt;
-		this.con=con;
+	public static TransactionsManager getTransactionsManagerInstance() {
+		if(transactionsManagerInstance == null)
+		{
+			transactionsManagerInstance = new TransactionsManager();
+		}
+		return transactionsManagerInstance;
 	}
 	
 	public void withdraw(float amount,String account_number ) throws SQLException

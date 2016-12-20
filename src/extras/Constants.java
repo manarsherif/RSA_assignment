@@ -25,6 +25,28 @@ public class Constants {
 		public static final String BankAddress = "BAddress";
 	}
 	
+	// Customer Table
+	public static final class CustomerTable {
+		public static final String CustomerTable = "Customer";
+		
+		public static final String SSN = "SSN";
+		public static final String Name = "CName";
+		public static final String Phone = "CPhone";
+		public static final String Address = "CAddress";
+	}
+	
+	// Account Table
+	public static final class AccountTable {
+		public static final String AccountTable = "Account";
+		
+		public static final String AccountNumber = "AccNumber";
+		public static final String Balance = "AccBalance";
+		public static final String BranchID = "BrID";
+		public static final String CustomerSSN = "CSSN";
+		public static final String AccountType = "AType";
+		public static final String AccountSince = "Since";
+	}
+	
 	// Employee Table
 	public static final class EmpTable {
 		public static final String EmpTable = "Employee";
@@ -39,5 +61,13 @@ public class Constants {
 		public static final String EmpDepartmentID = "EDepID";
 		public static final String EmpSex = "ESex";
 		public static final String EmpSince = "ESince";
+	}
+	
+	// Dept_Branch Table
+	public static final class DeptBranchTable {
+		public static final String DeptBranchTable = "Dept_Branch";
+		
+		public static final String BranchID = "BrID";
+		public static final String DepartmentID = "DeptID";
 	}
 }

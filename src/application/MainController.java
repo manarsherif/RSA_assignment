@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,12 +10,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import extras.Alerts;
-import extras.Constants;;
+import extras.Constants;
+import extras.Globals;
 
 public class MainController implements Initializable {
 	
@@ -25,7 +32,7 @@ public class MainController implements Initializable {
 	private TextField user;
 	
 	@FXML
-	private TextField pass;
+	private PasswordField pass;
 	
 	@FXML
 	private ComboBox<String> type;
@@ -53,26 +60,55 @@ public class MainController implements Initializable {
 		else
 		{
 			EmpManager empManagerInstance = EmpManager.getEmpManagerInstance();
-			boolean loginSuccess = empManagerInstance.checkEmpLogin(user.getText(), 
+			Globals.BranchID = empManagerInstance.checkEmpLogin(user.getText(), 
 					pass.getText(), type.getValue());
 			
-			if(loginSuccess == false)
+			if(Globals.BranchID == -1)
 			{
 				Alerts.createWarningAlert("Wrong Employee Name, Password, or Title");
 			}
 			else
 			{
+				Globals.SessionESSN = pass.getText();
 				// TODO
+				if(type.getValue().equals(Constants.MANAGER))
+				{
+					openWindow("/ManagerWindow.fxml");
+				}
+				else if(type.getValue().equals(Constants.CLERK))
+				{
+					openWindow("/ClerkWindow.fxml");
+				}
+				else if(type.getValue().equals(Constants.TELLER))
+				{
+					openWindow("/TellerWindow.fxml");
+				}
 			}
 		}
 	}
-
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		type.setItems(EmpTypes);
 		BankManager bankInstance = BankManager.getBankManagerInstance();
-		String BankName = bankInstance.getBankName(Constants.BANKID);
-		bank_name.setText(BankName);
+		Globals.BankName = bankInstance.getBankName(Constants.BANKID);
+		bank_name.setText(Globals.BankName);
+	}
+	
+	private void openWindow(String fxmlFile)
+	{
+		Stage primaryStage = (Stage) user.getScene().getWindow();
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource(fxmlFile));
+			Scene scene = user.getScene();
+			scene.setRoot(root);
+			primaryStage.setScene(scene);
+			primaryStage.setMaximized(true);
+			primaryStage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

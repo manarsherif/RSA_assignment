@@ -22,6 +22,14 @@ public class Alerts {
 		alert.show();
 	}
 	
+	public static void createInfoAlert(String title, String info)
+	{
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle(title);
+		alert.setHeaderText(info);
+		alert.show();
+	}
+	
 	public static void createErrorAlert(String error, String content)
 	{
 		Alert alert = new Alert(AlertType.ERROR);
