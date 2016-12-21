@@ -54,7 +54,7 @@ public class ClerkController implements Initializable {
 				}
 				else
 				{
-					Alerts.createInfoAlert("Add Savings Account", "Account were added successfully", "Your Account Number is "+AccNum);
+					Alerts.createInfoAlert("Add Savings Account", "Account was added successfully", "Your Account Number is "+AccNum);
 				}
 				} catch (Exception e) {
 				e.printStackTrace();
