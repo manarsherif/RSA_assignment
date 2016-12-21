@@ -39,11 +39,12 @@ public class ATMs{
 
 		public int get_ATM_ID(int cBankID,  String ATM_location) throws SQLException
 		{
-                        int ATM_ID;
 			String query = "SELECT ATMID FROM ATM WHERE cBankID ="+ cBankID + "AND ATM_location = '" + ATM_location + "'" ;
 			ResultSet rs = stmt.executeQuery(query);
-			ATM_ID = rs.getInt("ATMID");
-			return ATM_ID;
+			if(rs.next())
+				return rs.getInt("ATMID");
+			else
+				return -1;
 		}
 
 		public void removeATM(int ATM_ID) throws SQLException
