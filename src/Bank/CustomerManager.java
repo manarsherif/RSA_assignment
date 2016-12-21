@@ -43,5 +43,23 @@ public class CustomerManager {
 		System.out.println("Welcome to our bank Mr/Mrs"+name);
 		stmt.execute(query);
 	}
+	public void UpdateCustomerPhone(String cssn,String name,String phone) throws SQLException
+	{
+		String query="UPDATE"+CustomerTable.CustomerTable+
+                                        "SET"+CustomerTable.Phone+"="+ "'"+phone+"'"
+					"WHERE"+CustomerTable.SSN+"="+ "'"+cssn+"'"
+                                        "AND"+ CustomerTable.Name + "="+"'"+ name+"'";
+		System.out.println("Info update is completed Mr/Mrs"+name);
+		stmt.execute(query);
+	}
+ public void UpdateCustomerAddress(String cssn,String name,String address) throws SQLException
+	{
+		String query="UPDATE"+CustomerTable.CustomerTable+
+                                        "SET"+CustomerTable.Address+"="+ "'"+address+"'"
+					"WHERE"+CustomerTable.SSN+"="+ "'"+cssn+"'"
+                                        "AND"+ CustomerTable.Name + "="+"'"+ name+"'";
+		System.out.println("Info update is completed Mr/Mrs"+name);
+		stmt.execute(query);
+	}
 
 }
