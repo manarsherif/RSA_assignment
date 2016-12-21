@@ -29,8 +29,8 @@ public class Loans {
 	{
 		int LoanId=(int)(Math.random()*999999);
 		String query= "INSERT INTO Loan (LoanID, LAccNum, LAmount, LInterestRate, DueTime) VALUES	("+
-						LoanId+","+LoanAccNumber+","+loanAmount+","+interestRate+",'"+due_date+"');";
-		stmt.executeQuery(query);
+						LoanId+","+Integer.toString(LoanAccNumber)+","+loanAmount+","+interestRate+",'"+due_date+"');";
+		stmt.execute(query);
 		return LoanId;
 		
 	}
