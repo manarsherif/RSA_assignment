@@ -90,12 +90,12 @@ public class TransactionsManager {
 			stmt.execute(query1);
 			query1 ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number1+";";
 			rs1=stmt.executeQuery(query1);
-			add_transaction(account_number1, amount1,"Deposit", Globals.SessionESSN);
 			if(rs1.next())
 			{
 				balance=Float.parseFloat(rs1.getString("AccBalance"));
 			}
 			System.out.println("Deposit succeded");	
+			add_transaction(account_number1, amount1,"Deposit", Globals.SessionESSN);
 			return balance;
 			
 		}
