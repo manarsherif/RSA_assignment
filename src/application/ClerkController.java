@@ -72,7 +72,7 @@ public class ClerkController implements Initializable {
 			CustomerManager customerManagerInstance = CustomerManager.getCustomerManagerInstance();
 			try {
 				customerManagerInstance.addNewCustomer(result.get(1), result.get(0), result.get(2), result.get(3));
-				Alerts.createInfoAlert("Add Customer", "Customer were added successfully");
+				Alerts.createInfoAlert("Add Customer", "Customer was added successfully");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
