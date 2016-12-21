@@ -34,7 +34,7 @@ public class TransactionsManager {
 		return transactionsManagerInstance;
 	}
 	
-	public void withdraw(float amount,String account_number ) throws SQLException
+	public float withdraw(float amount,String account_number ) throws SQLException
 	{
 		
 		String query ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number+";";
@@ -43,7 +43,10 @@ public class TransactionsManager {
 		{
 			float balance =Float.parseFloat(rs.getString("AccBalance"));
 			if(amount>balance)
-				System.out.println("You don't have enough money in your accont");
+			{
+				// no enough money
+				return -2;
+			}
 			else
 			{
 				balance=balance-amount;
@@ -56,17 +59,17 @@ public class TransactionsManager {
 				if(rs.next())
 				{
 					balance=Float.parseFloat(rs.getString("AccBalance"));
-					System.out.println("your current balance is "+balance);
 				}
+				return balance;
 			}
 		}
 		else
 		{
-			System.out.println("You entered a non exisiting account");
-			System.out.println("Abort");
+			// wrong account num
+			return -1;
 		}	
 	}
-	public void deposit(float amount1,String account_number1) throws SQLException
+	public float deposit(float amount1,String account_number1) throws SQLException
 	{
 		
 		String query1 ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number1+";";
@@ -82,15 +85,15 @@ public class TransactionsManager {
 			if(rs1.next())
 			{
 				balance=Float.parseFloat(rs1.getString("AccBalance"));
-				System.out.println("your current balance is "+balance);
 			}
 			System.out.println("Deposit succeded");	
+			return balance;
 			
 		}
 		else
 		{
-			System.out.println("You entered a non exisiting account");
-			System.out.println("Abort");
+			// wrong account num
+			return -1;
 		}
 		
 	}

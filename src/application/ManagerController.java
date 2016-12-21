@@ -51,7 +51,7 @@ public class ManagerController implements Initializable {
 	public void LoanRequest(ActionEvent event) {
 		String[] fields = {"SSN", "Balance", "Loan Amount", "Loan Interest Rate"};
 		String[] fieldsHints = {"Customer SSN", "Account Balance", "Loan Amount","Loan Interest Rate"};
-		Optional<ArrayList<String>> result1 = Dialogs.openFieldsDialog(fields, fieldsHints, "Due Date", "Add", "Add Savings Account");
+		Optional<ArrayList<String>> result1 = Dialogs.openFieldsDialog(fields, fieldsHints, "Due Date", "Add", "Add Loan");
 		if(result1.isPresent())
 		{
 			ArrayList<String> accResult = result1.get();
