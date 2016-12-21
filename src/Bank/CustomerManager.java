@@ -47,8 +47,8 @@ public class CustomerManager {
 	{
 		String query="UPDATE"+CustomerTable.CustomerTable+
                                         "SET"+CustomerTable.Phone+"="+ "'"+phone+"'"
-					"WHERE"+CustomerTable.SSN+"="+ "'"+cssn+"'"
-                                        "AND"+ CustomerTable.Name + "="+"'"+ name+"'";
+					+"WHERE"+CustomerTable.SSN+"="+ "'"+cssn+"'"
+                                        +"AND"+ CustomerTable.Name + "="+"'"+ name+"'";
 		System.out.println("Info update is completed Mr/Mrs"+name);
 		stmt.execute(query);
 	}
@@ -56,8 +56,8 @@ public class CustomerManager {
 	{
 		String query="UPDATE"+CustomerTable.CustomerTable+
                                         "SET"+CustomerTable.Address+"="+ "'"+address+"'"
-					"WHERE"+CustomerTable.SSN+"="+ "'"+cssn+"'"
-                                        "AND"+ CustomerTable.Name + "="+"'"+ name+"'";
+					+"WHERE"+CustomerTable.SSN+"="+ "'"+cssn+"'"
+                                        +"AND"+ CustomerTable.Name + "="+"'"+ name+"'";
 		System.out.println("Info update is completed Mr/Mrs"+name);
 		stmt.execute(query);
 	}
