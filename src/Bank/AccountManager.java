@@ -67,8 +67,15 @@ public class AccountManager {
 		pst.setString(5, Account_type);
 		pst.setString(6, date);
 		pst.executeUpdate();
-		query = "INSERT INTO SavingsAccount (SavingsAccNum, SInterestRate) VALUES	("
-					+account_number+","+interest_rate+");";
+		if(Account_type=="0")
+		{
+			query = "INSERT INTO SavingsAccount (SavingsAccNum, SInterestRate) VALUES	("
+						+Integer.toString(account_number)+","+interest_rate+");";
+		}
+		else
+		{
+			query="INSERT INTO LoanAccount (LoanAccNum) VALUES	("+Integer.toString(account_number)+");";
+		}
 		stmt.executeQuery(query);
 		System.out.println("account is added successfuly");
 		return account_number;
