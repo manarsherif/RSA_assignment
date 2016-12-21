@@ -39,7 +39,7 @@ private static LoansManager loansManagerInstance = null;
 	{
 		int LoanId=(int)(Math.random()*999999);
 		String query= "INSERT INTO Loan (LoanID, LAccNum, LAmount, LInterestRate, DueTime) VALUES	("+
-						LoanId+","+LoanAccNumber+","+loanAmount+","+interestRate+",'"+due_date+"');";
+						LoanId+","+Integer.toString(LoanAccNumber)+","+loanAmount+","+interestRate+",'"+due_date+"');";
 		stmt.execute(query);
 		return LoanId;
 		
