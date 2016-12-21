@@ -3,18 +3,19 @@ package Bank;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 import com.mysql.jdbc.Statement;
 
 import extras.Constants;
 
-public class Loans {
-	private Scanner scanner ;
+public class LoansManager {
+	
+private static LoansManager loansManagerInstance = null;
+	
 	private Statement stmt;
 	private Connection conn;
-	Loans()
-	{
+	
+	private LoansManager() {
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
 			conn = (Connection) DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PASS);
@@ -25,12 +26,21 @@ public class Loans {
 			e.printStackTrace();
 		}
 	}
+	
+	public static LoansManager getLoansManagerInstance() {
+		if(loansManagerInstance == null)
+		{
+			loansManagerInstance = new LoansManager();
+		}
+		return loansManagerInstance;
+	}
+	
 	public int addNewLoan(int LoanAccNumber,float loanAmount,float interestRate,String due_date) throws SQLException
 	{
 		int LoanId=(int)(Math.random()*999999);
 		String query= "INSERT INTO Loan (LoanID, LAccNum, LAmount, LInterestRate, DueTime) VALUES	("+
 						LoanId+","+LoanAccNumber+","+loanAmount+","+interestRate+",'"+due_date+"');";
-		stmt.executeQuery(query);
+		stmt.execute(query);
 		return LoanId;
 		
 	}

@@ -29,7 +29,7 @@ public class ClerkController implements Initializable {
 	public void AddAccount(ActionEvent event) {
 		String[] fields = {"SSN", "Balance", "Interest Rate"};
 		String[] fieldsHints = {"Customer SSN", "Account Balance", "Account Interest Rate"};
-		Optional<ArrayList<String>> result1 = Dialogs.openFieldsDialog(fields, fieldsHints, "Add", "Add Savings Account");
+		Optional<ArrayList<String>> result1 = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Add", "Add Savings Account");
 		if(result1.isPresent())
 		{
 			ArrayList<String> accResult = result1.get();
@@ -41,7 +41,7 @@ public class ClerkController implements Initializable {
 				{
 					String[] fields2 = {"Name", "Phone", "Address"};
 					String[] fieldsHints2 = {"Customer Name", "Customer Phone", "Customer Address"};
-					Optional<ArrayList<String>> result2 = Dialogs.openFieldsDialog(fields2, fieldsHints2, "Add", "Add Customer");
+					Optional<ArrayList<String>> result2 = Dialogs.openFieldsDialog(fields2, fieldsHints2, "", "Add", "Add Customer");
 					if(result2.isPresent())
 					{
 						ArrayList<String> cusResult = result2.get();
@@ -65,7 +65,7 @@ public class ClerkController implements Initializable {
 	public void AddCustomer(ActionEvent event) {
 		String[] fields = {"Name", "SSN", "Phone", "Address"};
 		String[] fieldsHints = {"Customer Name", "Customer SSN", "Customer Phone", "Customer Address"};
-		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "Add", "Add Customer");
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Add", "Add Customer");
 		if(res.isPresent())
 		{
 			ArrayList<String> result = res.get();

@@ -41,7 +41,7 @@ public class Constants {
 		
 		public static final String EmpSSN = "ESSN";
 		public static final String EmpType = "EType";
-		public static final String EmpSalary = "ESalary";
+		public static final String EmpSalary = "ESalery";
 		public static final String EmpName = "EName";
 		public static final String EmpAddress = "EAddress";
 		public static final String EmpBirthdate = "EBirthdate";

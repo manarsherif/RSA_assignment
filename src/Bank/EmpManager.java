@@ -4,14 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 import com.mysql.jdbc.Statement;
 
 import extras.Constants;
 import extras.Constants.DeptBranchTable;
 import extras.Constants.EmpTable;
+import extras.Globals;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class EmpManager {
 	
@@ -62,18 +64,43 @@ public class EmpManager {
 	}
 	
 	
-	public void addNewEmployee(String essn,String etype, float esalery, String ename, String eadress, String ebirthdate, int ephone, int eDepID, String esex, Date esince) 
+	public boolean addNewEmployee(String essn, String etype, float esalery, String ename, String eaddress, String ebirthdate, String ephone, String esex) throws SQLException
 	{
-	String query="INSERT INTO "+EmpTable.EmpTable+" ("
+		String date=new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+		
+		String depIDquery = "SELECT EDepID FROM Employee WHERE ESSN='"+Globals.SessionESSN+"' AND EType='Manager'";
+		ResultSet rs=stmt.executeQuery(depIDquery);
+		if(! rs.next())
+		{
+			return false;
+		}
+		int deptID = Integer.parseInt(rs.getString(EmpTable.EmpDepartmentID));
+		String query = "";
+		if(ebirthdate.isEmpty())
+		{
+			query="INSERT INTO "+EmpTable.EmpTable+" ("
+					+EmpTable.EmpSSN+", "+EmpTable.EmpType+", "+EmpTable.EmpSalary
+					+", "+EmpTable.EmpName+", "+EmpTable.EmpAddress+", "+EmpTable.EmpPhone
+					+",  "+EmpTable.EmpDepartmentID+",  "+EmpTable.EmpSex+",  "+EmpTable.EmpSince
+					+") VALUES ('"+essn+"', '"+ etype+"', "+esalery+", '"+ename+"', '"
+					+eaddress+"', '"+ephone+"', '"+deptID+"', '"+esex+"', '"+date+"');";
+		}
+		else
+		{
+			query="INSERT INTO "+EmpTable.EmpTable+" ("
 					+EmpTable.EmpSSN+", "+EmpTable.EmpType+", "
 					+EmpTable.EmpSalary+", "+EmpTable.EmpName
-					+" , "+EmpTable.EmpAddress+" , "+EmpTable.EmpBirthdate+" , "+EmpTable.EmpPhone
-					+" ,  "+EmpTable.EmpDepartmentID+" ,  "+EmpTable.EmpSex+" ,  "+EmpTable.EmpSince
-					+" ) VALUES ('"+essn+"','"+ etype+"', '"+esalery+"', '"+ename+"' , '"+eadress+"' , '"+ebirthdate+"' , '"+ephone+"' , '"+eDepID+"' '"+esex+"' , '"+esince+"');";
+					+", "+EmpTable.EmpAddress+", "+EmpTable.EmpBirthdate+", "+EmpTable.EmpPhone
+					+",  "+EmpTable.EmpDepartmentID+",  "+EmpTable.EmpSex+",  "+EmpTable.EmpSince
+					+") VALUES ('"+essn+"', '"+ etype+"', "+esalery+", '"+ename+"', '"+eaddress+"', '"
+					+ebirthdate+"', '"+ephone+"', '"+deptID+"', '"+esex+"', '"+date+"');";
+		}
 		try {
 			stmt.execute(query);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 }
 	
