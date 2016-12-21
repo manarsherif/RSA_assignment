@@ -2,6 +2,7 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -9,22 +10,15 @@ import java.util.ResourceBundle;
 import Bank.AccountManager;
 import Bank.CustomerManager;
 import extras.Alerts;
+import extras.Dialogs;
 import extras.Globals;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class ClerkController implements Initializable {
@@ -33,11 +27,57 @@ public class ClerkController implements Initializable {
 	private Label bank_name;
 	
 	public void AddAccount(ActionEvent event) {
-		
+		String[] fields = {"SSN", "Balance", "Interest Rate"};
+		String[] fieldsHints = {"Customer SSN", "Account Balance", "Account Interest Rate"};
+		Optional<ArrayList<String>> result1 = Dialogs.openDialog(fields, fieldsHints, "Add", "Add Savings Account", fields.length);
+		if(result1.isPresent())
+		{
+			ArrayList<String> accResult = result1.get();
+			AccountManager accountManagerInstance = AccountManager.getAccountManagerInstance();
+			try {
+				int AccNum = accountManagerInstance.addNewAccount(Float.parseFloat(accResult.get(1)), accResult.get(0), 
+						"0", Globals.BranchID, Float.parseFloat(accResult.get(2)));
+				if(AccNum == -1)
+				{
+					String[] fields2 = {"Name", "Phone", "Address"};
+					String[] fieldsHints2 = {"Customer Name", "Customer Phone", "Customer Address"};
+					Optional<ArrayList<String>> result2 = Dialogs.openDialog(fields2, fieldsHints2, "Add", "Add Customer", fields2.length);
+					if(result2.isPresent())
+					{
+						ArrayList<String> cusResult = result2.get();
+						CustomerManager customerManagerInstance = CustomerManager.getCustomerManagerInstance();
+						customerManagerInstance.addNewCustomer(accResult.get(0), cusResult.get(0), cusResult.get(1), cusResult.get(2));				
+						AccNum = accountManagerInstance.addNewAccount(Float.parseFloat(accResult.get(1)), accResult.get(0), 
+								"0", Globals.BranchID, Float.parseFloat(accResult.get(2)));
+						Alerts.createInfoAlert("Add Savings Account", "Account were added successfully", "Your Account Number is "+AccNum);
+					}
+				}
+				else
+				{
+					Alerts.createInfoAlert("Add Savings Account", "Account were added successfully", "Your Account Number is "+AccNum);
+				}
+				} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void AddCustomer(ActionEvent event) {
-		openCustomerDialog();
+		String[] fields = {"Name", "SSN", "Phone", "Address"};
+		String[] fieldsHints = {"Customer Name", "Customer SSN", "Customer Phone", "Customer Address"};
+		Optional<ArrayList<String>> res = Dialogs.openDialog(fields, fieldsHints, "Add", "Add Customer", fields.length);
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			CustomerManager customerManagerInstance = CustomerManager.getCustomerManagerInstance();
+			try {
+				customerManagerInstance.addNewCustomer(result.get(1), result.get(0), result.get(2), result.get(3));
+				Alerts.createInfoAlert("Add Customer", "Customer were added successfully");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 	public void LogOut(ActionEvent event) throws IOException {
@@ -57,116 +97,4 @@ public class ClerkController implements Initializable {
 		bank_name.setText(Globals.BankName);
 	}
 	
-	private void openCustomerDialog() {
-		Dialog<ArrayList<String>> dialog = new Dialog<>();
-		dialog.setTitle("Add Customer");
-		ButtonType button = new ButtonType("Add", ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(button, ButtonType.CANCEL);
-		
-		GridPane grid = new GridPane();
-		grid.setHgap(20);
-		grid.setVgap(20);
-		grid.setPadding(new Insets(40, 150, 30, 30));
-		
-		TextField name = new TextField();
-		name.setPromptText("Customer Name");
-		TextField ssn = new TextField();
-		ssn.setPromptText("Customer SSN");
-		TextField phone = new TextField();
-		phone.setPromptText("Customer Phone");
-		TextField address = new TextField();
-		address.setPromptText("Customer Address");
-		
-		grid.add(new Label("Name:"), 0, 0);
-		grid.add(name, 1, 0);
-		grid.add(new Label("SSN:"), 0, 1);
-		grid.add(ssn, 1, 1);
-		grid.add(new Label("Phone:"), 0, 2);
-		grid.add(phone, 1, 2);
-		grid.add(new Label("Address:"), 0, 3);
-		grid.add(address, 1, 3);
-		
-		// Enable/Disable add button depending on whether fields were entered.
-		Node addButton = dialog.getDialogPane().lookupButton(button);
-		addButton.setDisable(true);
-
-		// Do some validation (using the Java 8 lambda syntax).
-		name.textProperty().addListener((observable, oldValue, newValue) -> {
-			if(name.getText().isEmpty() || ssn.getText().isEmpty() 
-					|| phone.getText().isEmpty() || address.getText().isEmpty())
-			{
-				addButton.setDisable(true);
-			}
-			else
-			{
-				addButton.setDisable(false);
-			}
-		});
-		
-		ssn.textProperty().addListener((observable, oldValue, newValue) -> {
-			if(name.getText().isEmpty() || ssn.getText().isEmpty() 
-					|| phone.getText().isEmpty() || address.getText().isEmpty())
-			{
-				addButton.setDisable(true);
-			}
-			else
-			{
-				addButton.setDisable(false);
-			}
-		});
-		
-		phone.textProperty().addListener((observable, oldValue, newValue) -> {
-			if(name.getText().isEmpty() || ssn.getText().isEmpty() 
-					|| phone.getText().isEmpty() || address.getText().isEmpty())
-			{
-				addButton.setDisable(true);
-			}
-			else
-			{
-				addButton.setDisable(false);
-			}
-		});
-		
-		address.textProperty().addListener((observable, oldValue, newValue) -> {
-			if(name.getText().isEmpty() || ssn.getText().isEmpty() 
-					|| phone.getText().isEmpty() || address.getText().isEmpty())
-			{
-				addButton.setDisable(true);
-			}
-			else
-			{
-				addButton.setDisable(false);
-			}
-		});
-
-		dialog.getDialogPane().setContent(grid);
-
-		// Request focus on the name field by default.
-		Platform.runLater(() -> name.requestFocus());
-		
-
-		dialog.setResultConverter(dialogButton -> {
-		    if (dialogButton == button) {
-		    	ArrayList<String> result = new ArrayList<>();
-		    	result.add(name.getText());
-		    	result.add(ssn.getText());
-		    	result.add(phone.getText());
-		    	result.add(address.getText());
-		        return result;
-		    }
-		    return null;
-		});
-		
-		Optional<ArrayList<String>> result = dialog.showAndWait();
-		
-		result.ifPresent( inputs -> {
-			CustomerManager customerManagerInstance = CustomerManager.getCustomerManagerInstance();
-			try {
-				customerManagerInstance.addNewCustomer(inputs.get(1), inputs.get(0), inputs.get(2), inputs.get(3));
-				Alerts.createInfoAlert("Add Customer", "Customer were added successfully");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
 }

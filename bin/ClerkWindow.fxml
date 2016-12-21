@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ClerkController">
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
@@ -21,7 +20,7 @@
             </Label>
          </children>
       </VBox>
-      <Button mnemonicParsing="false" onAction="#AddAccount" text="Add Account">
+      <Button mnemonicParsing="false" onAction="#AddAccount" text="Add Savings Account">
          <VBox.margin>
             <Insets bottom="30.0" top="30.0" />
          </VBox.margin>
@@ -43,7 +42,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" text="Button">
+      <Button mnemonicParsing="false" text="Update Customer Info">
          <VBox.margin>
             <Insets bottom="30.0" top="30.0" />
          </VBox.margin>

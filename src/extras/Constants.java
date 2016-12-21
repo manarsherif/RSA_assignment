@@ -35,18 +35,6 @@ public class Constants {
 		public static final String Address = "CAddress";
 	}
 	
-	// Account Table
-	public static final class AccountTable {
-		public static final String AccountTable = "Account";
-		
-		public static final String AccountNumber = "AccNumber";
-		public static final String Balance = "AccBalance";
-		public static final String BranchID = "BrID";
-		public static final String CustomerSSN = "CSSN";
-		public static final String AccountType = "AType";
-		public static final String AccountSince = "Since";
-	}
-	
 	// Employee Table
 	public static final class EmpTable {
 		public static final String EmpTable = "Employee";

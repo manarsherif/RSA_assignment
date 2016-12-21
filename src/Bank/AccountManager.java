@@ -11,8 +11,6 @@ import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 import extras.Constants;
-import extras.Constants.AccountTable;
-import extras.Constants.CustomerTable;
 
 public class AccountManager {
 	private static AccountManager accountManagerInstance = null;
@@ -39,30 +37,22 @@ public class AccountManager {
 		return accountManagerInstance;
 	}
 	
-	public int  addNewAccount(String balance,String cssn,String Account_type,String br_id ,float interest_rate ) throws SQLException
+	public int  addNewAccount(float balance,String cssn,String Account_type,int br_id ,float interest_rate ) throws SQLException
 	{
 		int account_number=(int)(Math.random()*999999);
-		String query ="SELECT *"
-				+ " FROM " + CustomerTable.CustomerTable 
-				+ " WHERE " + CustomerTable.SSN + "='" + cssn + "'";
+		String query ="SELECT * FROM Customer WHERE SSN='" + cssn + "'";
 		ResultSet rs=stmt.executeQuery(query);
 		if(! rs.next())//not a customer then takes his/her data and add him/her to customers 
 		{
-			//CustomerManager cm= new CustomerManager(stmt, conn);
-			//cm.addNewCustomer(cssn, name, phone, address);
 			return -1;
 		}
 		String date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
 		PreparedStatement pst = (PreparedStatement) conn.prepareStatement(
-						"INSERT INTO " + AccountTable.AccountTable + " ("
-						+AccountTable.AccountNumber+", "+AccountTable.Balance
-						+", "+AccountTable.BranchID+", "+AccountTable.CustomerSSN
-						+", "+AccountTable.AccountType+", "+AccountTable.AccountSince
-						+")VALUES (?,?,?,?,?,?);");
+						"INSERT INTO Account (AccNumber, AccBalance, BrID, CSSN, AType, since)VALUES (?,?,?,?,?,?);");
 		
 		pst.setString(1, Integer.toString(account_number));
-		pst.setString(2, balance);
-		pst.setString(3, br_id);
+		pst.setString(2, Float.toString(balance));
+		pst.setString(3, Integer.toString(br_id));
 		pst.setString(4, cssn);
 		pst.setString(5, Account_type);
 		pst.setString(6, date);
@@ -70,13 +60,13 @@ public class AccountManager {
 		if(Account_type=="0")
 		{
 			query = "INSERT INTO SavingsAccount (SavingsAccNum, SInterestRate) VALUES	("
-						+Integer.toString(account_number)+","+interest_rate+");";
+						+Integer.toString(account_number)+", "+interest_rate+");";
 		}
 		else
 		{
 			query="INSERT INTO LoanAccount (LoanAccNum) VALUES	("+Integer.toString(account_number)+");";
 		}
-		stmt.executeQuery(query);
+		stmt.execute(query);
 		System.out.println("account is added successfuly");
 		return account_number;
 	}
