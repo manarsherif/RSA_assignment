@@ -3,7 +3,6 @@ package Bank;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Scanner;
 import com.mysql.jdbc.Statement;
 import extras.Constants;
 

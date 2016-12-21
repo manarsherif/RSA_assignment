@@ -97,6 +97,16 @@ public class EmpManager {
 		}
 		try {
 			stmt.execute(query);
+			if(etype.equals(Constants.CLERK))
+			{
+				String subquery = "INSERT INTO Clerk VALUES ('"+essn+"');";
+				stmt.execute(subquery);
+			}
+			else if(etype.equals(Constants.TELLER))
+			{
+				String subquery = "INSERT INTO Teller VALUES ('"+essn+"');";
+				stmt.execute(subquery);
+			}
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();

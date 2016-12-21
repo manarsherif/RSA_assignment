@@ -3,7 +3,6 @@ package Bank;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Scanner;
 import java.sql.ResultSet;
 import java.util.*;
 import com.mysql.jdbc.Statement;
@@ -34,7 +33,7 @@ public class ATMs{
 
         public void addNewATM(int cBankID, float ATM_Cash, String ATM_location, boolean inBank) throws SQLException
 		{
-                        String query = "INSERT INTO ATM(CBankID, ATMcash, ATMlocation, InBank) VALUES ("+ cBankID + "," +  ATM_Cash + "," + ATM_location + "," + inBank + ");" ;
+            String query = "INSERT INTO ATM(CBankID, ATMcash, ATMlocation, InBank) VALUES ("+ cBankID + "," +  ATM_Cash + "," + ATM_location + "," + inBank + ");" ;
 			stmt.execute(query);
 		}
 
@@ -42,7 +41,7 @@ public class ATMs{
 		{
                         int ATM_ID;
 			String query = "SELECT ATMID FROM ATM WHERE cBankID ="+ cBankID + "AND ATM_location = '" + ATM_location + "'" ;
-			ResultSet rs = stmt.execute(query);
+			ResultSet rs = stmt.executeQuery(query);
 			ATM_ID = rs.getInt("ATMID");
 			return ATM_ID;
 		}
