@@ -39,7 +39,7 @@ public class AccountManager {
 		return accountManagerInstance;
 	}
 	
-	public boolean addNewAccount(String balance,String cssn,String Account_type,String br_id) throws SQLException
+	public int  addNewAccount(String balance,String cssn,String Account_type,String br_id ,float interest_rate ) throws SQLException
 	{
 		int account_number=(int)(Math.random()*999999);
 		String query ="SELECT *"
@@ -50,7 +50,7 @@ public class AccountManager {
 		{
 			//CustomerManager cm= new CustomerManager(stmt, conn);
 			//cm.addNewCustomer(cssn, name, phone, address);
-			return false;
+			return -1;
 		}
 		String date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
 		PreparedStatement pst = (PreparedStatement) conn.prepareStatement(
@@ -67,8 +67,11 @@ public class AccountManager {
 		pst.setString(5, Account_type);
 		pst.setString(6, date);
 		pst.executeUpdate();
+		query = "INSERT INTO SavingsAccount (SavingsAccNum, SInterestRate) VALUES	("
+					+account_number+","+interest_rate+");";
+		stmt.executeQuery(query);
 		System.out.println("account is added successfuly");
-		return true;
+		return account_number;
 	}
 	
 

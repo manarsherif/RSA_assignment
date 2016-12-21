@@ -54,7 +54,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="600.0">
+      <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="600.0">
          <children>
             <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#LogOut" text="Log Out">
                <VBox.margin>
