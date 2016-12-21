@@ -11,6 +11,8 @@ import extras.Constants;
 import extras.Constants.DeptBranchTable;
 import extras.Constants.EmpTable;
 
+import java.util.Date;
+
 public class EmpManager {
 	
 	private static EmpManager empManagerInstance = null;
@@ -58,4 +60,17 @@ public class EmpManager {
 		}
 		return -1;
 	}
+	
+	
+	public void addNewEmployee(String essn,String etype, float esalery, String ename, String eadress, String ebirthdate, int ephone, int eDepID, String esex, Date esince) 
+{
+	String query="INSERT INTO "+EmployeeTable.EmployeeTable+" ("
+					+EmplyeeTable.ESSN+", "+EmployeeTable.Etype+", "
+					+EmployeeTable.Esalery+", "+EmployeeTable.Ename
+					+" , "+EmployeeTable.Eadress+" , "+EmployeeTable.Ebirthdate+" , "+EmployeeTable.Ephone+" ,  "+EmployeeTable.EDepID+" ,  "+EmployeeTable.Esex+" ,  "+EmployeeTable.Esince+" ) 
+					VALUES ('"+ESSN+"','"+ Etype+"', '"+Esalery+"', '"+Ename+"' , '"+Eadress+"' , '"+Ebirthdate+"' , '"+Ephone+"' , '"+EDepID+"' '"+Esex+"' , '"+Esince+"');";
+		System.out.println("Welcome to our bank Mr/Mrs"+ename);
+		stmt.execute(query);
+}
+	
 }
