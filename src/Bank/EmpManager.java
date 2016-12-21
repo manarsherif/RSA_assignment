@@ -63,14 +63,19 @@ public class EmpManager {
 	
 	
 	public void addNewEmployee(String essn,String etype, float esalery, String ename, String eadress, String ebirthdate, int ephone, int eDepID, String esex, Date esince) 
-{
-	String query="INSERT INTO "+EmployeeTable.EmployeeTable+" ("
-					+EmplyeeTable.ESSN+", "+EmployeeTable.Etype+", "
-					+EmployeeTable.Esalery+", "+EmployeeTable.Ename
-					+" , "+EmployeeTable.Eadress+" , "+EmployeeTable.Ebirthdate+" , "+EmployeeTable.Ephone+" ,  "+EmployeeTable.EDepID+" ,  "+EmployeeTable.Esex+" ,  "+EmployeeTable.Esince+" ) 
-					VALUES ('"+ESSN+"','"+ Etype+"', '"+Esalery+"', '"+Ename+"' , '"+Eadress+"' , '"+Ebirthdate+"' , '"+Ephone+"' , '"+EDepID+"' '"+Esex+"' , '"+Esince+"');";
+	{
+	String query="INSERT INTO "+EmpTable.EmpTable+" ("
+					+EmpTable.EmpSSN+", "+EmpTable.EmpType+", "
+					+EmpTable.EmpSalary+", "+EmpTable.EmpName
+					+" , "+EmpTable.EmpAddress+" , "+EmpTable.EmpBirthdate+" , "+EmpTable.EmpPhone
+					+" ,  "+EmpTable.EmpDepartmentID+" ,  "+EmpTable.EmpSex+" ,  "+EmpTable.EmpSince
+					+" ) VALUES ('"+essn+"','"+ etype+"', '"+esalery+"', '"+ename+"' , '"+eadress+"' , '"+ebirthdate+"' , '"+ephone+"' , '"+eDepID+"' '"+esex+"' , '"+esince+"');";
 		System.out.println("Welcome to our bank Mr/Mrs"+ename);
-		stmt.execute(query);
+		try {
+			stmt.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 }
 	
 }
