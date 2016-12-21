@@ -29,7 +29,7 @@ public class ClerkController implements Initializable {
 	public void AddAccount(ActionEvent event) {
 		String[] fields = {"SSN", "Balance", "Interest Rate"};
 		String[] fieldsHints = {"Customer SSN", "Account Balance", "Account Interest Rate"};
-		Optional<ArrayList<String>> result1 = Dialogs.openDialog(fields, fieldsHints, "Add", "Add Savings Account", fields.length);
+		Optional<ArrayList<String>> result1 = Dialogs.openFieldsDialog(fields, fieldsHints, "Add", "Add Savings Account");
 		if(result1.isPresent())
 		{
 			ArrayList<String> accResult = result1.get();
@@ -41,7 +41,7 @@ public class ClerkController implements Initializable {
 				{
 					String[] fields2 = {"Name", "Phone", "Address"};
 					String[] fieldsHints2 = {"Customer Name", "Customer Phone", "Customer Address"};
-					Optional<ArrayList<String>> result2 = Dialogs.openDialog(fields2, fieldsHints2, "Add", "Add Customer", fields2.length);
+					Optional<ArrayList<String>> result2 = Dialogs.openFieldsDialog(fields2, fieldsHints2, "Add", "Add Customer");
 					if(result2.isPresent())
 					{
 						ArrayList<String> cusResult = result2.get();
@@ -49,7 +49,7 @@ public class ClerkController implements Initializable {
 						customerManagerInstance.addNewCustomer(accResult.get(0), cusResult.get(0), cusResult.get(1), cusResult.get(2));				
 						AccNum = accountManagerInstance.addNewAccount(Float.parseFloat(accResult.get(1)), accResult.get(0), 
 								"0", Globals.BranchID, Float.parseFloat(accResult.get(2)));
-						Alerts.createInfoAlert("Add Savings Account", "Account were added successfully", "Your Account Number is "+AccNum);
+						Alerts.createInfoAlert("Add Savings Account", "Account was added successfully", "Your Account Number is "+AccNum);
 					}
 				}
 				else
@@ -65,7 +65,7 @@ public class ClerkController implements Initializable {
 	public void AddCustomer(ActionEvent event) {
 		String[] fields = {"Name", "SSN", "Phone", "Address"};
 		String[] fieldsHints = {"Customer Name", "Customer SSN", "Customer Phone", "Customer Address"};
-		Optional<ArrayList<String>> res = Dialogs.openDialog(fields, fieldsHints, "Add", "Add Customer", fields.length);
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "Add", "Add Customer");
 		if(res.isPresent())
 		{
 			ArrayList<String> result = res.get();
@@ -78,6 +78,44 @@ public class ClerkController implements Initializable {
 			}
 		}
 		
+	}
+	
+	public void UpdateInfo(ActionEvent event) {
+		String[] fields = {"Name", "SSN"};
+		String[] fieldsHints = {"Customer Name", "Customer SSN"};
+		String[] choices = {"Phone", "Address"};
+		Optional<ArrayList<String>> res = Dialogs.openUpdateDialog(fields, fieldsHints, choices, "Update", "Update Customer Information");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			CustomerManager customerManagerInstance = CustomerManager.getCustomerManagerInstance();
+			try {
+				int success = 0;
+				if(result.get(3).equals("Phone")) 
+				{
+					success = customerManagerInstance.UpdateCustomerPhone(result.get(1), 
+							result.get(0), result.get(2));
+				}
+				else if(result.get(3).equals("Address"))
+				{
+					success = customerManagerInstance.UpdateCustomerAddress(result.get(1), 
+							result.get(0), result.get(2));
+				}
+				
+				if(success > 0)
+				{
+					Alerts.createInfoAlert("Update Customer Information", 
+							"Customer "+result.get(3)+" was updated successfully");
+				}
+				else
+				{
+					Alerts.createWarningAlert("Update Customer Information Failed", 
+							"Wrong Name or SSN");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void LogOut(ActionEvent event) throws IOException {

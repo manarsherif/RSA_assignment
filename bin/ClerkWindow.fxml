@@ -42,7 +42,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" text="Update Customer Info">
+      <Button mnemonicParsing="false" onAction="#UpdateInfo" text="Update Customer Info">
          <VBox.margin>
             <Insets bottom="30.0" top="30.0" />
          </VBox.margin>

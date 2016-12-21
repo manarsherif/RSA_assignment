@@ -70,7 +70,6 @@ public class EmpManager {
 					+" , "+EmpTable.EmpAddress+" , "+EmpTable.EmpBirthdate+" , "+EmpTable.EmpPhone
 					+" ,  "+EmpTable.EmpDepartmentID+" ,  "+EmpTable.EmpSex+" ,  "+EmpTable.EmpSince
 					+" ) VALUES ('"+essn+"','"+ etype+"', '"+esalery+"', '"+ename+"' , '"+eadress+"' , '"+ebirthdate+"' , '"+ephone+"' , '"+eDepID+"' '"+esex+"' , '"+esince+"');";
-		System.out.println("Welcome to our bank Mr/Mrs"+ename);
 		try {
 			stmt.execute(query);
 		} catch (SQLException e) {

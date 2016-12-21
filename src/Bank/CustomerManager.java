@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import com.mysql.jdbc.Statement;
 
 import extras.Constants;
-import extras.Constants.CustomerTable;
 
 public class CustomerManager {
 	private static CustomerManager customerManagerInstance = null;
@@ -36,30 +35,26 @@ public class CustomerManager {
 	
 	public void addNewCustomer(String cssn,String name,String phone,String address) throws SQLException
 	{
-		String query="INSERT INTO "+CustomerTable.CustomerTable+" ("
-					+CustomerTable.SSN+", "+CustomerTable.Name+", "
-					+CustomerTable.Phone+", "+CustomerTable.Address
-					+") VALUES ('"+cssn+"','"+ name+"', '"+phone+"', '"+address+"');";
+		String query="INSERT INTO Customer (SSN, CName, CPhone, CAddress) VALUES "
+				+ "('"+cssn+"','"+ name+"', '"+phone+"', '"+address+"');";
 		System.out.println("Welcome to our bank Mr/Mrs"+name);
 		stmt.execute(query);
 	}
-	public void UpdateCustomerPhone(String cssn,String name,String phone) throws SQLException
-	{
-		String query="UPDATE"+CustomerTable.CustomerTable+
-                                        "SET"+CustomerTable.Phone+"="+ "'"+phone+"'"
-					+"WHERE"+CustomerTable.SSN+"="+ "'"+cssn+"'"
-                                        +"AND"+ CustomerTable.Name + "="+"'"+ name+"'";
+	public int UpdateCustomerPhone(String cssn,String name,String phone) throws SQLException
+	{		
+		String query="UPDATE Customer SET CPhone='"+phone+"'"
+					+" WHERE SSN='"+cssn+"'"
+                    +" AND CName='"+ name+"'";
 		System.out.println("Info update is completed Mr/Mrs"+name);
-		stmt.execute(query);
+		return stmt.executeUpdate(query);
 	}
- public void UpdateCustomerAddress(String cssn,String name,String address) throws SQLException
+	public int UpdateCustomerAddress(String cssn,String name,String address) throws SQLException
 	{
-		String query="UPDATE"+CustomerTable.CustomerTable+
-                                        "SET"+CustomerTable.Address+"="+ "'"+address+"'"
-					+"WHERE"+CustomerTable.SSN+"="+ "'"+cssn+"'"
-                                        +"AND"+ CustomerTable.Name + "="+"'"+ name+"'";
+		String query="UPDATE Customer SET CAddress='"+address+"'"
+				+" WHERE SSN='"+cssn+"'"
+                +" AND CName='"+ name+"'";
 		System.out.println("Info update is completed Mr/Mrs"+name);
-		stmt.execute(query);
+		return stmt.executeUpdate(query);
 	}
 
 }
