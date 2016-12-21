@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import com.mysql.jdbc.Statement;
 
 import extras.Constants;
+import extras.Globals;
 
 public class TransactionsManager {
 	private static TransactionsManager transactionsManagerInstance = null;
@@ -39,16 +42,14 @@ public class TransactionsManager {
 		
 		String query ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number+";";
 		ResultSet rs=stmt.executeQuery(query);
+		float balance;
+		Boolean flag=false;
 		if(rs.next())
 		{
-			float balance =Float.parseFloat(rs.getString("AccBalance"));
-			if(amount>balance)
+			balance =Float.parseFloat(rs.getString("AccBalance"));
+			if(amount<balance)
 			{
-				// no enough money
-				return -2;
-			}
-			else
-			{
+				flag=true;
 				balance=balance-amount;
 				query="UPDATE Account SET AccBalance="+Float.toString(balance)+"WHERE AccNumber="+account_number+";";
 				stmt.execute(query);
@@ -56,11 +57,11 @@ public class TransactionsManager {
 				query ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number+";";
 				//System.out.println(query);
 				rs=stmt.executeQuery(query);
+				//add_transaction(account_number, amount, "Withdraw", Globals.SessionESSN);
 				if(rs.next())
 				{
 					balance=Float.parseFloat(rs.getString("AccBalance"));
 				}
-				return balance;
 			}
 		}
 		else
@@ -68,6 +69,13 @@ public class TransactionsManager {
 			// wrong account num
 			return -1;
 		}	
+		if(flag)
+		{
+			add_transaction(account_number, amount,"Withdraw", Globals.SessionESSN);
+			return balance;
+		}
+		else 
+			return -2;
 	}
 	public float deposit(float amount1,String account_number1) throws SQLException
 	{
@@ -82,6 +90,7 @@ public class TransactionsManager {
 			stmt.execute(query1);
 			query1 ="SELECT AccBalance FROM Account WHERE AccNumber="+account_number1+";";
 			rs1=stmt.executeQuery(query1);
+			add_transaction(account_number1, amount1,"Deposit", Globals.SessionESSN);
 			if(rs1.next())
 			{
 				balance=Float.parseFloat(rs1.getString("AccBalance"));
@@ -96,6 +105,16 @@ public class TransactionsManager {
 			return -1;
 		}
 		
+	}
+	public void add_transaction(String account_number,float amount,String TransType,String tellerSSN) throws SQLException
+	{
+		int TransactionId=(int)(Math.random()*999999);
+		//String date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
+		String query="INSERT INTO Transactions (TransactionID, AccountNum, TransAmount, TransType,  TellerSSN) VALUES	("+
+				Integer.toString(TransactionId)+","+account_number+","+amount+",'"+
+				TransType+"','"+tellerSSN+"');";
+		System.out.println(query);
+		stmt.execute(query);
 	}
 	
 }

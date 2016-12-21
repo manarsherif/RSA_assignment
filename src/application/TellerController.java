@@ -37,7 +37,7 @@ public class TellerController implements Initializable {
 				float balance = transManagerInstance.deposit(Float.parseFloat(result.get(1)), result.get(0));
 				if(balance == -1)
 				{
-					Alerts.createInfoAlert("Deposit", "You entered a non exisiting account");
+					Alerts.createWarningAlert("Deposit", "You entered a non exisiting account");
 				}
 				else
 				{
@@ -52,7 +52,7 @@ public class TellerController implements Initializable {
 	public void Withdraw(ActionEvent event) {
 		String[] fields = {"Account Number", "Amount"};
 		String[] fieldsHints = {"Account Number", "Amount"};
-		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Add", "Deposit");
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Add", "Withdraw");
 		if(res.isPresent())
 		{
 			ArrayList<String> result = res.get();
@@ -61,15 +61,15 @@ public class TellerController implements Initializable {
 				float balance = transManagerInstance.withdraw(Float.parseFloat(result.get(1)), result.get(0));
 				if(balance == -1)
 				{
-					Alerts.createInfoAlert("Deposit", "You entered a non exisiting account");
+					Alerts.createWarningAlert("Withdraw", "You entered a non exisiting account");
 				}
 				else if(balance == -2)
 				{
-					Alerts.createInfoAlert("Deposit", "You don't have enough money in your account");
+					Alerts.createWarningAlert("Withdraw", "You don't have enough money in your account");
 				}
 				else
 				{
-					Alerts.createInfoAlert("Deposit", "Your current balance is "+balance);
+					Alerts.createInfoAlert("Withdraw", "Your current balance is "+balance);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
