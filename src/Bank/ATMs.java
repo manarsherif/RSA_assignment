@@ -43,23 +43,55 @@ public class ATMs{
 	public void addNewATM(int cBankID, float ATM_Cash, String ATM_location, boolean inBank) throws SQLException
 	{
 		String query = "INSERT INTO ATM(CBankID, ATMcash, ATMlocation, InBank) VALUES ("+ cBankID + "," +  ATM_Cash + ",'" + ATM_location + "'," + inBank + ");" ;
-		stmt.execute(query);
+		stmt.executeUpdate(query);
 	}
 
-	public int get_ATM_ID(int cBankID,  String ATM_location) throws SQLException
+	public List <Integer> get_ATM_ID(int cBankID,  String ATM_location) throws SQLException
 	{
-		String query = "SELECT ATMID FROM ATM WHERE cBankID ="+ cBankID + "AND ATM_location = '" + ATM_location + "'" ;
+		List <Integer> ATM_IDs = new ArrayList <Integer>();
+                String query = "SELECT ATMID FROM ATM WHERE cBankID ="+ cBankID + "AND ATM_location = '" + ATM_location + "'" ;
 		ResultSet rs = stmt.executeQuery(query);
-		if(rs.next())
-			return rs.getInt("ATMID");
-		else
-			return -1;
+                if (!rs.next())
+                {
+                     ATM_IDs.add(-1);
+                }   
+		while(rs.next())
+                {
+			ATM_IDs.add(rs.getInt("ATMID"));
+                }
+                rs.close();
+                
+                return ATM_IDs;
 	}
 
-	public void removeATM(int ATM_ID) throws SQLException
+	public boolean removeATM(int ATM_ID) throws SQLException
 	{
-		String query = "DELETE FROM ATM WHERE ATMID ="+ ATM_ID + ";";
-		stmt.execute(query);
-		removedATM.add(ATM_ID);
-	}
+                boolean rs;
+                String query = "DELETE FROM ATM WHERE ATMID ="+ ATM_ID + ";";
+                if (stmt.executeUpdate(query) > 0)
+                {
+                    removedATM.add(ATM_ID);
+                    rs  = true;
+                }
+                else
+                {
+                    rs = false;
+                }
+                return rs;
+        }
+        
+        public void show_ATM_Info(int ATM_ID) throws SQLException
+        {
+                if (ATM_ID == -1)
+                {
+                    String query = "Select * FROM ATM;" ;
+                    stmt.executeQuery(query);         
+                }
+                else
+                {
+                    String query_ = "Select * FROM ATM WHERE ATM_ID =" + ATM_ID + ";";
+                    stmt.executeQuery(query_);
+                }
+        }
+
 };

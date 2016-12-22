@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import com.mysql.jdbc.Statement;
 
 import extras.Constants;
+import java.sql.ResultSet;
 
 public class Cards{
 
@@ -39,25 +40,66 @@ public class Cards{
 
 	public int addNewCard(int accountNumber, int cardType, float credit) throws SQLException
 	{
-		int cardSerialNumber=(int)(Math.random()*899999);
+                boolean rs;
+                int cardSerialNumber=(int)(Math.random()*899999);
 		String query = "INSERT INTO Card(SerialNum, AccNum, CType) VALUES ("+ cardSerialNumber + "," +  accountNumber + "," + cardType +");";
-		stmt.execute(query);
+		if (stmt.executeUpdate(query) > 0)
+                    rs = true;
+                else 
+                    rs = false;
+                
 		if (cardType == 0)
 		{
 			String Dquery = "INSERT INTO Debit_Card(DSerialNum, Credit) VALUES ("+ cardSerialNumber + "," + credit + ");";
-			stmt.execute(Dquery);
+			stmt.executeUpdate(Dquery);
 		}
 		else if(cardType == 1)
 		{
 			String Cquery = "INSERT INTO Credit_Card(CSerialNum, Payment, SpentCredit) VALUES ("+ cardSerialNumber + "," +  credit + "," + 0 +");";
-			stmt.execute(Cquery);
+			stmt.executeUpdate(Cquery);
 		}
-		return cardSerialNumber;
+                if (rs)
+                    return cardSerialNumber;
+                else 
+                    return -1;
 	}
 
-	public void removeCard(int cardSerialNumber) throws SQLException
+	public boolean removeCard(int cardSerialNumber) throws SQLException
 	{
-		String query = "DELETE FROM Card WHERE SerialNum =" + cardSerialNumber + ";";
-		stmt.execute(query);
+		boolean rs;
+                String query = "DELETE FROM Card WHERE SerialNum =" + cardSerialNumber + ";";
+		if (stmt.executeUpdate(query) > 0)
+                    rs = true;
+                else 
+                    rs = false;
+                return rs;
 	}
+        
+        public void show_card_Info(int cardSerialNumber) throws SQLException
+        {
+                String query = "SELECT CType FROM ATM WHERE SerialNum =" + cardSerialNumber + ";";
+                ResultSet rs  = stmt.executeQuery(query);
+                int type = rs.getInt("CType");
+                if (type == 0)
+                {
+                    String Dquery = "SELECT * FROM Debit_Card WHERE DSerialNum =" + cardSerialNumber + ";";
+                    ResultSet D_rs = stmt.ecexcuteQuery(Dquery);
+                    while (D_rs.next())
+                    {
+                        float credit = D_rs.getFloat("Credit");
+                        System.out.print("Card Serial Number: " + cardSerialNumber);
+                        System.out.print("Credit: " + credit);
+                    }
+                }
+                else if (type == 1)
+                {
+                    String Cquery = "SELECT * FROM Credit_Card WHERE DSerialNum =" + cardSerialNumber + ";";
+                    ResultSet C_rs = stmt.ecexcuteQuery(Cquery);
+                    float payment = C_rs.getFloat("Payment");
+                    float spentCredit = C_rs.getFloat("SpentCredit");
+                        System.out.print("Card Serial Number: " + cardSerialNumber);
+                        System.out.print("Payment: " + payment);
+                        System.out.print("Spent Credit: " + spentCredit);
+                }
+        }
 }
