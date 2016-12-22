@@ -197,7 +197,7 @@ public class Dialogs {
 		return result;
 	}
 	
-	public static Optional<ArrayList<String>> openEmployeeDialog(String[] fields, String[] hints, String[] Choices, String buttonLabel, String title) {
+	public static Optional<ArrayList<String>> openGeneralDialog(String[] fields, String[] hints, String[] Choices, String ChoicesTitle, String dateLabel, String[] selectionLabel, String buttonLabel, String title) {
 		Dialog<ArrayList<String>> dialog = new Dialog<>();
 		dialog.setTitle(title);
 		ButtonType button = new ButtonType(buttonLabel, ButtonData.OK_DONE);
@@ -218,39 +218,45 @@ public class Dialogs {
 			grid.add(textFields.get(i), 1, i);
 		}
 		DatePicker BDPicker = new DatePicker();
-		BDPicker.setPromptText("Employee Birthdate");
-		
-		ComboBox<String> choicesBox = new ComboBox<>();
-		choicesBox.setPromptText("Employee Title");
 		
 		ToggleGroup group = new ToggleGroup();
-
-		RadioButton male = new RadioButton("Male");
-		male.setToggleGroup(group);
-		male.setSelected(true);
-
-		RadioButton female = new RadioButton("Female");
-		female.setToggleGroup(group);
+		if(selectionLabel.length != 0)
+		{
+			grid.add(new Label(selectionLabel[0]), 0, textFields.size()+1);
+			for(int i = 1; i < selectionLabel.length; i++)
+			{
+				RadioButton choice = new RadioButton(selectionLabel[i]);
+				choice.setToggleGroup(group);
+				grid.add(choice, i, textFields.size()+1);
+				if(i == 1)
+					choice.setSelected(true);
+			}
+		}
 		
-		ObservableList<String> list = FXCollections.observableArrayList(Choices);
-		choicesBox.setItems(list);
-		grid.add(new Label("Birthdate:"), 0, textFields.size()+1);
-		grid.add(BDPicker, 1, textFields.size()+1);
-		
-		grid.add(new Label("Title:"), 0, textFields.size()+2);
-		grid.add(choicesBox, 1, textFields.size()+2);
-		
-		grid.add(new Label("Sex:"), 0, textFields.size()+3);
-		grid.add(male, 1, textFields.size()+3);
-		grid.add(female, 2, textFields.size()+3);
+		if(!dateLabel.isEmpty()) 
+		{
+			
+			BDPicker.setPromptText(dateLabel);
+			
+			grid.add(new Label(dateLabel+":"), 0, textFields.size()+2);
+			grid.add(BDPicker, 1, textFields.size()+2);
+		}		
 		
 		// Enable/Disable add button depending on whether fields were entered.
 		Node addButton = dialog.getDialogPane().lookupButton(button);
 		addButton.setDisable(true);
 		
-		for(int i = 0; i < textFields.size(); i++)
+		ComboBox<String> choicesBox = new ComboBox<>();
+		
+		if(Choices.length != 0)
 		{
-			textFields.get(i).textProperty().addListener((observable, oldValue, newValue) -> {
+			choicesBox.setPromptText(ChoicesTitle);		
+			ObservableList<String> list = FXCollections.observableArrayList(Choices);
+			choicesBox.setItems(list);
+			grid.add(new Label(ChoicesTitle), 0, textFields.size()+3);
+			grid.add(choicesBox, 1, textFields.size()+3);
+			
+			choicesBox.valueProperty().addListener((observable, oldValue, newValue) -> {
 				addButton.setDisable(false);
 				for(int j = 0; j < textFields.size(); j++)
 				{
@@ -262,16 +268,20 @@ public class Dialogs {
 			});
 		}
 		
-		choicesBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-			addButton.setDisable(false);
-			for(int j = 0; j < textFields.size(); j++)
-			{
-				if(textFields.get(j).getText().isEmpty() || choicesBox.getSelectionModel().getSelectedIndex() < 0)
+		
+		for(int i = 0; i < textFields.size(); i++)
+		{
+			textFields.get(i).textProperty().addListener((observable, oldValue, newValue) -> {
+				addButton.setDisable(false);
+				for(int j = 0; j < textFields.size(); j++)
 				{
-					addButton.setDisable(true);
+					if(textFields.get(j).getText().isEmpty() ||( Choices.length != 0 && choicesBox.getSelectionModel().getSelectedIndex() < 0))
+					{
+						addButton.setDisable(true);
+					}
 				}
-			}
-		});
+			});
+		}
 		
 		dialog.getDialogPane().setContent(grid);
 
@@ -287,15 +297,22 @@ public class Dialogs {
 		    		result.add(textFields.get(i).getText());
 		    	}
 		    	String dateString = "";
+		    	
+		    	if(selectionLabel.length != 0)
+		    	{
+			    	String selection = ((RadioButton)group.getSelectedToggle()).getText();
+			    	result.add(selection);
+		    	}
+		    	if(Choices.length != 0)
+		    	{
+			    	result.add(choicesBox.getValue());
+		    	}
 		    	if(BDPicker.getValue() != null)
 		    	{
 		    		Instant instant = Instant.from(BDPicker.getValue().atStartOfDay(ZoneId.systemDefault()));
 			    	Date date = Date.from(instant);
 			    	dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
 		    	}
-		    	String sex = ((RadioButton)group.getSelectedToggle()).getText();
-		    	result.add(sex);
-		    	result.add(choicesBox.getValue());
 		    	result.add(dateString);
 		        return result;
 		    }

@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import Bank.AccountManager;
+import Bank.Cards;
 import Bank.CustomerManager;
 import extras.Alerts;
 import extras.Dialogs;
@@ -117,7 +118,54 @@ public class ClerkController implements Initializable {
 			}
 		}
 	}
+	
+	public void AddCard(ActionEvent event) {
+		String[] fields = {"Account Number", "Amount"};
+		String[] fieldsHints = {"Account Number", "Credit or Payment"};
+		String[] selection = {"Card Type", "Debit Card", "Credit Card"};
+		String[] choices = {};
+		Optional<ArrayList<String>> res = Dialogs.openGeneralDialog(fields, fieldsHints, choices, "", "", selection, "Add", "Add Card");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			Cards cardManagerInstance = Cards.getCardManagerInstance();
+			int type = 0;
+			if(result.get(2).equals("Credit Card"))
+			{
+				type = 1;
+			}
+			try {
+				int cardID = cardManagerInstance.addNewCard(Integer.parseInt(result.get(0)), type, Float.parseFloat(result.get(1)));
+				Alerts.createInfoAlert("Add Card", "Card was added successfully", "Card Id is "+ cardID);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
 
+	public void RemoveCard(ActionEvent event) {
+		String[] fields = {"ID"};
+		String[] fieldsHints = {"Card ID"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Remove", "Remove Card");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			Cards cardManagerInstance = Cards.getCardManagerInstance();
+			try {
+				cardManagerInstance.removeCard(Integer.parseInt(result.get(0)));
+				Alerts.createInfoAlert("Remove Card", "Card was removed successfully");
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
 	public void LogOut(ActionEvent event) throws IOException {
 		Stage primaryStage = (Stage) bank_name.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));

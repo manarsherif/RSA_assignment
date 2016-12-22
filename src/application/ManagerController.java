@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import Bank.ATMs;
 import Bank.AccountManager;
 import Bank.CustomerManager;
 import Bank.EmpManager;
@@ -28,12 +29,14 @@ public class ManagerController implements Initializable {
 
 	@FXML
 	private Label bank_name;
-	
+
 	public void AddEmployee(ActionEvent event) {
 		String[] fields = {"Name", "SSN", "Phone", "Address", "Salary"};
 		String[] fieldsHints = {"Employee Name", "Employee SSN", "Employee Phone", "Employee Address", "Employee Salary"};
+		String[] selection = {"Sex", "Male", "Female"};
+		String date = "Employee Birthdate";
 		String[] choices = {Constants.CLERK, Constants.TELLER};
-		Optional<ArrayList<String>> res = Dialogs.openEmployeeDialog(fields, fieldsHints, choices, "Add", "Add Employee");
+		Optional<ArrayList<String>> res = Dialogs.openGeneralDialog(fields, fieldsHints, choices, "Employee Title", date, selection, "Add", "Add Employee");
 		if(res.isPresent())
 		{
 			ArrayList<String> result = res.get();
@@ -47,7 +50,7 @@ public class ManagerController implements Initializable {
 			}
 		}
 	}
-	
+
 	public void LoanRequest(ActionEvent event) {
 		String[] fields = {"SSN", "Balance", "Loan Amount", "Loan Interest Rate"};
 		String[] fieldsHints = {"Customer SSN", "Account Balance", "Loan Amount","Loan Interest Rate"};
@@ -76,28 +79,65 @@ public class ManagerController implements Initializable {
 				LoansManager loanManagerInstance = LoansManager.getLoansManagerInstance();
 				int loanId = loanManagerInstance.addNewLoan(AccNum, Float.parseFloat(accResult.get(2))
 						, Float.parseFloat(accResult.get(3)), accResult.get(4));
-				
+
 				Alerts.createInfoAlert("Add Loan Account", "Loan Account was added successfully"
 						, "Your Account Number is "+AccNum+" And your Loan ID is "+loanId);
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
+	public void AddATM(ActionEvent event) {
+		String[] fields = {"Cash", "Location"};
+		String[] fieldsHints = {"ATM Cash", "ATM Location"};
+		String[] selection = {"In Bank", "Yes", "No"};
+		String[] choices = {};
+		Optional<ArrayList<String>> res = Dialogs.openGeneralDialog(fields, fieldsHints, choices, "", "", selection, "Add", "Add ATM");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			try {
+				ATMs atmManagerInstance = ATMs.getATMsManagerInstance();
+				boolean inBank = result.get(2).equals("Yes");
+				atmManagerInstance.addNewATM(Constants.BANKID, Float.parseFloat(result.get(0)), result.get(1), inBank);
+				Alerts.createInfoAlert("Add ATM", "ATM was added successfully");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void RemoveATM(ActionEvent event) {
+		String[] fields = {"ID"};
+		String[] fieldsHints = {"ATM ID"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Remove", "Remove ATM");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			try {
+				ATMs atmManagerInstance = ATMs.getATMsManagerInstance();
+				atmManagerInstance.removeATM(Integer.parseInt(result.get(0)));
+				Alerts.createInfoAlert("Remove ATM", "ATM was removed successfully");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void LogOut(ActionEvent event) throws IOException {
 		Stage primaryStage = (Stage) bank_name.getScene().getWindow();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
-        Parent root = loader.load();
-        Scene scene = bank_name.getScene();
+		Parent root = loader.load();
+		Scene scene = bank_name.getScene();
 		scene.setRoot(root);	
-        primaryStage.setScene(scene);
-        Globals.SessionESSN = "";
-        Globals.BranchID = 0;
-        primaryStage.show();	
+		primaryStage.setScene(scene);
+		Globals.SessionESSN = "";
+		Globals.BranchID = 0;
+		primaryStage.show();	
 	}
-	
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		bank_name.setText(Globals.BankName);
