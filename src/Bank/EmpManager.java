@@ -113,5 +113,11 @@ public class EmpManager {
 			return false;
 		}
 }
+	public void Watchsupervisor(int inESSN , String inEname) throws SQLException
+ +	{
+ +		String query ="SELECT Ename,EDepID FROM Employee where  ESSN IN"+" (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"+inESSN+"'"
+ +                    +" AND Ename= '"+ inEname+"');";
+ +		stmt.executeUpdate(query);
+ +	}
 	
 }
