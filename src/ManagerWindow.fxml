@@ -30,7 +30,7 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
             </Button>
             <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#ChangeSalary" text="Change Employee Salary">
@@ -41,7 +41,7 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
             </Button>
             <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#ViewEmployee" text="View Employee Info">
@@ -52,7 +52,18 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </VBox.margin>
+            </Button>
+            <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#ViewSupervisors" text="View Employee Supervisors">
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
             </Button>
             <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#LoanRequest" text="Loan Request">
@@ -63,7 +74,7 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
             </Button>
             <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#AddATM" text="Add ATM">
@@ -74,7 +85,7 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
             </Button>
             <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#ShowATM" text="Show ATM Info">
@@ -85,7 +96,7 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
             </Button>
             <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#RemoveATM" text="Remove ATM">
@@ -96,7 +107,7 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </VBox.margin>
             </Button>
          </children>

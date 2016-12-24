@@ -101,6 +101,42 @@ public class ManagerController implements Initializable {
 			}
 		}
 	}
+	
+	public void ViewSupervisors(ActionEvent event) {
+		String[] fields = {"Name", "SSN"};
+		String[] fieldsHints = {"Employee Name", "Employee SSN"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "View", "View Employee Supervisors");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			EmpManager empManagerInstance = EmpManager.getEmpManagerInstance();
+			try {
+				ArrayList<ArrayList<String>> array = empManagerInstance
+						.Watchsupervisor(result.get(1), result.get(0));
+				if(array.isEmpty())
+				{
+					Alerts.createWarningAlert("Employee Supervisors", "Wrong Employee SSN or Name");
+				}
+				else
+				{
+					String print = "";
+					for (int i = 0; i < array.size(); i++) {
+						print += "Supervisor " + i + ":\n"+
+								"\tSSN:\t\t\t" + array.get(i).get(0) + "\n" + 
+								"\tName:\t\t" + array.get(i).get(1) + "\n" + 
+								"\tPhone:\t\t" + array.get(i).get(2) + "\n"; 
+					}
+					Alerts.createInfoAlert(
+							"Employee Supervisors",
+							"Employee Name:\t" + result.get(0) + "\n" +
+							"Employee SSN:\t" + result.get(1),
+							print);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public void LoanRequest(ActionEvent event) {
 		String[] fields = {"SSN", "Balance", "Loan Amount", "Loan Interest Rate"};

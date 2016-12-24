@@ -116,30 +116,26 @@ public class EmpManager {
 		}
 	}
 
-	public ArrayList<String> Watchsupervisor(String ESSN , String inEname) throws SQLException
-	{
-		String query ="SELECT Ename,ESSN,Ephone FROM Employee where  ESSN IN"+" (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"+ESSN+"'"
-                    +" AND Ename= '"+ inEname+"');";
-		ResultSet rs =  stmt.executeUpdate(query);
-              ArrayList<String> array = new ArrayList<String>();
+	public ArrayList<ArrayList<String>> Watchsupervisor(String ESSN, String inEname)
+			throws SQLException {
+		String query = "SELECT Ename,ESSN,Ephone FROM Employee where  ESSN IN"
+				+ " (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"
+				+ ESSN + "'" + " AND Ename= '" + inEname + "');";
+		ResultSet rs = stmt.executeQuery(query);
+		ArrayList<ArrayList<String>> array = new ArrayList<>();
 
-		if (rs.next())
-		
-			
-			{
-				String ssn = rs.getString(EmpTable.EmpSSN);
-				String name = rs.getString(EmpTable.EmpName);
-				String phone = rs.getString(EmpTable.EmpPhone);
-				array.add(ssn);
-				array.add(name);
-				array.add(phone);
-				
-				
-				
-				
-				} else {
-			array.clear();
-		      }
+		while (rs.next())
+		{
+			ArrayList<String> Supervisor = new ArrayList<>();
+			String ssn = rs.getString(EmpTable.EmpSSN);
+			String name = rs.getString(EmpTable.EmpName);
+			String phone = rs.getString(EmpTable.EmpPhone);
+			Supervisor.add(ssn);
+			Supervisor.add(name);
+			Supervisor.add(phone);
+
+			array.add(Supervisor);
+		} 
 		return array;
 	}
 
