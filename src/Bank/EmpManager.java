@@ -178,12 +178,17 @@ public class EmpManager {
 		
 		String q =  "SELECT EmpType FROM Employee WHERE ESSN='" + essn + "'" ;
 		String qq = "SELECT ESSN FROM Employee WHERE ESSN='" + essn + "'";
+		ResultSet rs = stmt.executeQuery(q);
+		ResultSet r = stmt.executeQuery(qq);
 		
-		if (qq != essn)
+		String ssn = String.valueOf(r);
+		String type = String.valueOf(rs);
+		
+		if (!ssn.equals(essn))
 		{
 			return false;
 		}
-		else if (q == "Manager")
+		else if (type.equals("Manager"))
 		{
 			return false;
 		}
@@ -192,6 +197,8 @@ public class EmpManager {
 			String query="UPDATE "+EmpTable.EmpTable+
                     " SET "+EmpTable.EmpSalary+"="+ "'"+esalery+"'"
 					+" WHERE "+EmpTable.EmpSSN+"="+ "'"+essn+"'";
+			
+			ResultSet t = stmt.executeQuery(query);
 			
 			return true;
 		}
