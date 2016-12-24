@@ -13,6 +13,7 @@ import extras.Constants.DeptBranchTable;
 import extras.Constants.EmpTable;
 import extras.Globals;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EmpManager {
@@ -114,10 +115,67 @@ public class EmpManager {
 		}
 }
 	public void Watchsupervisor(int inESSN , String inEname) throws SQLException
- +	{
- +		String query ="SELECT Ename,EDepID FROM Employee where  ESSN IN"+" (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"+inESSN+"'"
- +                    +" AND Ename= '"+ inEname+"');";
- +		stmt.executeUpdate(query);
- +	}
+ 	{
+ 		String query ="SELECT Ename,EDepID FROM Employee where  ESSN IN"+" (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"+inESSN+"'"
+                     +" AND Ename= '"+ inEname+"');";
+ 		stmt.executeUpdate(query);
+ 	}
+	
+	
+	public ArrayList<String> viewFromEmployee(String essn) throws SQLException
+	{
+		String query ="SELECT * FROM Employee WHERE SSN='" + essn + "'";
+		ResultSet rs = stmt.executeQuery(query);
+		
+		String q ="SELECT SSN FROM Customer WHERE SSN='" + essn + "'";
+		ResultSet ss = stmt.executeQuery(q);
+		String sss = String.valueOf(ss);
+		
+		ArrayList<String> array = new ArrayList<String>();
+		
+		
+		while (rs.next())
+		{
+			if (sss == essn)
+			{
+				String ssn = rs.getString("EmpSSN");
+				String type = rs.getString("EmpType");
+				float s = rs.getFloat("EmpSalary");
+				String name = rs.getString("EmpName");
+				String adress = rs.getString("EmpAddress");
+				String birthdate = rs.getString("EmpBirthDate");
+				String phone = rs.getString("EmpPhone");
+				String sex = rs.getString("EmpSex");
+				String department = rs.getString("EmpDepartmentID");
+				
+				String salery = String.valueOf(s);
+				
+				array.add(ssn);
+				array.add(type);
+				array.add(salery);
+				array.add(name);
+				array.add(adress);
+				array.add(birthdate);
+				array.add(phone);
+				array.add(sex);
+				array.add(department);
+				
+				
+				
+			}
+			else 
+			{
+				System.out.println("ESSN not valid");
+				array.clear();
+				
+			}
+			
+		}
+		return array;
+		
+
+
+
+	}
 	
 }
