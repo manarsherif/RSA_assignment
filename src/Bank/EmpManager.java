@@ -116,11 +116,31 @@ public class EmpManager {
 		}
 	}
 
-	public void Watchsupervisor(int inESSN, String inEname) throws SQLException {
-		String query = "SELECT Ename,EDepID FROM Employee where  ESSN IN"
-				+ " (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"
-				+ inESSN + "'" + " AND Ename= '" + inEname + "');";
-		stmt.executeUpdate(query);
+	public ArrayList<String> Watchsupervisor(String ESSN , String inEname) throws SQLException
+	{
+		String query ="SELECT Ename,ESSN,Ephone FROM Employee where  ESSN IN"+" (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"+ESSN+"'"
+                    +" AND Ename= '"+ inEname+"');";
+		ResultSet rs =  stmt.executeUpdate(query);
+              ArrayList<String> array = new ArrayList<String>();
+
+		if (rs.next())
+		
+			
+			{
+				String ssn = rs.getString(EmpTable.EmpSSN);
+				String name = rs.getString(EmpTable.EmpName);
+				String phone = rs.getString(EmpTable.EmpPhone);
+				array.add(ssn);
+				array.add(name);
+				array.add(phone);
+				
+				
+				
+				
+				} else {
+			array.clear();
+		      }
+		return array;
 	}
 
 	public ArrayList<String> viewFromEmployee(String essn) throws SQLException {
