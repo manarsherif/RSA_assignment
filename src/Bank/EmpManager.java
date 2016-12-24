@@ -17,45 +17,45 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EmpManager {
-	
+
 	private static EmpManager empManagerInstance = null;
-	
+
 	private Statement stmt;
 	private Connection conn;
-	
+
 	private EmpManager() {
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
-			conn = (Connection) DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PASS);
-			stmt = (Statement) 	conn.createStatement();
+			conn = (Connection) DriverManager.getConnection(Constants.DB_URL,
+					Constants.DB_USER, Constants.DB_PASS);
+			stmt = (Statement) conn.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static EmpManager getEmpManagerInstance() {
-		if(empManagerInstance == null)
-		{
+		if (empManagerInstance == null) {
 			empManagerInstance = new EmpManager();
 		}
 		return empManagerInstance;
 	}
-	
+
 	public int checkEmpLogin(String name, String pass, String type) {
-		String query = "SELECT " + DeptBranchTable.BranchID
-				+ " FROM " + EmpTable.EmpTable + ", " + DeptBranchTable.DeptBranchTable
+		String query = "SELECT " + DeptBranchTable.BranchID + " FROM "
+				+ EmpTable.EmpTable + ", " + DeptBranchTable.DeptBranchTable
 				+ " WHERE " + EmpTable.EmpName + "=" + "'" + name + "'"
-				+ " AND " + EmpTable.EmpSSN + "=" + "'" + pass + "'"
-				+ " AND " + EmpTable.EmpType + "=" + "'" + type + "'"
-				+ " AND " + EmpTable.EmpDepartmentID + "=" + DeptBranchTable.DepartmentID;
-		
+				+ " AND " + EmpTable.EmpSSN + "=" + "'" + pass + "'" + " AND "
+				+ EmpTable.EmpType + "=" + "'" + type + "'" + " AND "
+				+ EmpTable.EmpDepartmentID + "=" + DeptBranchTable.DepartmentID;
+
 		try {
 			ResultSet res = stmt.executeQuery(query);
-			if(res.next())
-			{
-				int BranchID = Integer.parseUnsignedInt(res.getString(DeptBranchTable.BranchID));
+			if (res.next()) {
+				int BranchID = Integer.parseUnsignedInt(res
+						.getString(DeptBranchTable.BranchID));
 				return BranchID;
 			}
 		} catch (SQLException e) {
@@ -63,49 +63,50 @@ public class EmpManager {
 		}
 		return -1;
 	}
-	
-	
-	public boolean addNewEmployee(String essn, String etype, float esalery, String ename, String eaddress, String ebirthdate, String ephone, String esex) throws SQLException
-	{
-		String date=new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-		
-		String depIDquery = "SELECT EDepID FROM Employee WHERE ESSN='"+Globals.SessionESSN+"' AND EType='Manager'";
-		ResultSet rs=stmt.executeQuery(depIDquery);
-		if(! rs.next())
-		{
+
+	public boolean addNewEmployee(String essn, String etype, float esalery,
+			String ename, String eaddress, String ebirthdate, String ephone,
+			String esex) throws SQLException {
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar
+				.getInstance().getTime());
+
+		String depIDquery = "SELECT EDepID FROM Employee WHERE ESSN='"
+				+ Globals.SessionESSN + "' AND EType='Manager'";
+		ResultSet rs = stmt.executeQuery(depIDquery);
+		if (!rs.next()) {
 			return false;
 		}
 		int deptID = Integer.parseInt(rs.getString(EmpTable.EmpDepartmentID));
 		String query = "";
-		if(ebirthdate.isEmpty())
-		{
-			query="INSERT INTO "+EmpTable.EmpTable+" ("
-					+EmpTable.EmpSSN+", "+EmpTable.EmpType+", "+EmpTable.EmpSalary
-					+", "+EmpTable.EmpName+", "+EmpTable.EmpAddress+", "+EmpTable.EmpPhone
-					+",  "+EmpTable.EmpDepartmentID+",  "+EmpTable.EmpSex+",  "+EmpTable.EmpSince
-					+") VALUES ('"+essn+"', '"+ etype+"', "+esalery+", '"+ename+"', '"
-					+eaddress+"', '"+ephone+"', '"+deptID+"', '"+esex+"', '"+date+"');";
-		}
-		else
-		{
-			query="INSERT INTO "+EmpTable.EmpTable+" ("
-					+EmpTable.EmpSSN+", "+EmpTable.EmpType+", "
-					+EmpTable.EmpSalary+", "+EmpTable.EmpName
-					+", "+EmpTable.EmpAddress+", "+EmpTable.EmpBirthdate+", "+EmpTable.EmpPhone
-					+",  "+EmpTable.EmpDepartmentID+",  "+EmpTable.EmpSex+",  "+EmpTable.EmpSince
-					+") VALUES ('"+essn+"', '"+ etype+"', "+esalery+", '"+ename+"', '"+eaddress+"', '"
-					+ebirthdate+"', '"+ephone+"', '"+deptID+"', '"+esex+"', '"+date+"');";
+		if (ebirthdate.isEmpty()) {
+			query = "INSERT INTO " + EmpTable.EmpTable + " (" + EmpTable.EmpSSN
+					+ ", " + EmpTable.EmpType + ", " + EmpTable.EmpSalary
+					+ ", " + EmpTable.EmpName + ", " + EmpTable.EmpAddress
+					+ ", " + EmpTable.EmpPhone + ",  "
+					+ EmpTable.EmpDepartmentID + ",  " + EmpTable.EmpSex
+					+ ",  " + EmpTable.EmpSince + ") VALUES ('" + essn + "', '"
+					+ etype + "', " + esalery + ", '" + ename + "', '"
+					+ eaddress + "', '" + ephone + "', '" + deptID + "', '"
+					+ esex + "', '" + date + "');";
+		} else {
+			query = "INSERT INTO " + EmpTable.EmpTable + " (" + EmpTable.EmpSSN
+					+ ", " + EmpTable.EmpType + ", " + EmpTable.EmpSalary
+					+ ", " + EmpTable.EmpName + ", " + EmpTable.EmpAddress
+					+ ", " + EmpTable.EmpBirthdate + ", " + EmpTable.EmpPhone
+					+ ",  " + EmpTable.EmpDepartmentID + ",  "
+					+ EmpTable.EmpSex + ",  " + EmpTable.EmpSince
+					+ ") VALUES ('" + essn + "', '" + etype + "', " + esalery
+					+ ", '" + ename + "', '" + eaddress + "', '" + ebirthdate
+					+ "', '" + ephone + "', '" + deptID + "', '" + esex
+					+ "', '" + date + "');";
 		}
 		try {
 			stmt.execute(query);
-			if(etype.equals(Constants.CLERK))
-			{
-				String subquery = "INSERT INTO Clerk VALUES ('"+essn+"');";
+			if (etype.equals(Constants.CLERK)) {
+				String subquery = "INSERT INTO Clerk VALUES ('" + essn + "');";
 				stmt.execute(subquery);
-			}
-			else if(etype.equals(Constants.TELLER))
-			{
-				String subquery = "INSERT INTO Teller VALUES ('"+essn+"');";
+			} else if (etype.equals(Constants.TELLER)) {
+				String subquery = "INSERT INTO Teller VALUES ('" + essn + "');";
 				stmt.execute(subquery);
 			}
 			return true;
@@ -113,69 +114,50 @@ public class EmpManager {
 			e.printStackTrace();
 			return false;
 		}
-}
-	public void Watchsupervisor(int inESSN , String inEname) throws SQLException
- 	{
- 		String query ="SELECT Ename,EDepID FROM Employee where  ESSN IN"+" (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"+inESSN+"'"
-                     +" AND Ename= '"+ inEname+"');";
- 		stmt.executeUpdate(query);
- 	}
-	
-	
-	public ArrayList<String> viewFromEmployee(String essn) throws SQLException
-	{
-		String query ="SELECT * FROM Employee WHERE SSN='" + essn + "'";
+	}
+
+	public void Watchsupervisor(int inESSN, String inEname) throws SQLException {
+		String query = "SELECT Ename,EDepID FROM Employee where  ESSN IN"
+				+ " (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"
+				+ inESSN + "'" + " AND Ename= '" + inEname + "');";
+		stmt.executeUpdate(query);
+	}
+
+	public ArrayList<String> viewFromEmployee(String essn) throws SQLException {
+		String query = "SELECT * FROM Employee WHERE ESSN='" + essn + "'";
 		ResultSet rs = stmt.executeQuery(query);
-		
-		String q ="SELECT SSN FROM Customer WHERE SSN='" + essn + "'";
-		ResultSet ss = stmt.executeQuery(q);
-		String sss = String.valueOf(ss);
-		
+
 		ArrayList<String> array = new ArrayList<String>();
-		
-		
-		while (rs.next())
-		{
-			if (sss == essn)
-			{
-				String ssn = rs.getString("EmpSSN");
-				String type = rs.getString("EmpType");
-				float s = rs.getFloat("EmpSalary");
-				String name = rs.getString("EmpName");
-				String adress = rs.getString("EmpAddress");
-				String birthdate = rs.getString("EmpBirthDate");
-				String phone = rs.getString("EmpPhone");
-				String sex = rs.getString("EmpSex");
-				String department = rs.getString("EmpDepartmentID");
-				
-				String salery = String.valueOf(s);
-				
-				array.add(ssn);
-				array.add(type);
-				array.add(salery);
-				array.add(name);
-				array.add(adress);
-				array.add(birthdate);
-				array.add(phone);
-				array.add(sex);
-				array.add(department);
-				
-				
-				
-			}
-			else 
-			{
-				System.out.println("ESSN not valid");
-				array.clear();
-				
-			}
-			
+
+		if (rs.next()) {
+			String ssn = rs.getString(EmpTable.EmpSSN);
+			String type = rs.getString(EmpTable.EmpType);
+			float s = rs.getFloat(EmpTable.EmpSalary);
+			String name = rs.getString(EmpTable.EmpName);
+			String address = rs.getString(EmpTable.EmpAddress);
+			String birthdate = rs.getString(EmpTable.EmpBirthdate);
+			String phone = rs.getString(EmpTable.EmpPhone);
+			String sex = rs.getString(EmpTable.EmpSex);
+			String department = rs.getString(EmpTable.EmpDepartmentID);
+
+			String salery = String.valueOf(s);
+
+			array.add(ssn);
+			array.add(type);
+			array.add(salery);
+			array.add(name);
+			array.add(address);
+			array.add(birthdate);
+			array.add(phone);
+			array.add(sex);
+			array.add(department);
+
+		} else {
+			array.clear();
 		}
+
 		return array;
-		
-
-
 
 	}
-	
+
 }

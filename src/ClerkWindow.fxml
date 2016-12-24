@@ -24,7 +24,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#AddAccount" text="Add Savings Account">
                <VBox.margin>
-                  <Insets bottom="30.0" top="30.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
                <padding>
                   <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
@@ -35,7 +35,7 @@
             </Button>
             <Button mnemonicParsing="false" onAction="#AddCustomer" text="Add Customer">
                <VBox.margin>
-                  <Insets bottom="30.0" top="30.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
                <padding>
                   <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
@@ -46,7 +46,7 @@
             </Button>
             <Button mnemonicParsing="false" onAction="#UpdateInfo" text="Update Customer Info">
                <VBox.margin>
-                  <Insets bottom="30.0" top="30.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
                <padding>
                   <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
@@ -63,7 +63,18 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#ShowCard" text="Show Card Info">
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
             </Button>
             <Button mnemonicParsing="false" onAction="#RemoveCard" text="Remove Card">
@@ -74,7 +85,7 @@
                   <Font size="18.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </VBox.margin>
             </Button>
          </children>

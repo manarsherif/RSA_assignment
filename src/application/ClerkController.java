@@ -145,6 +145,46 @@ public class ClerkController implements Initializable {
 			
 		}
 	}
+	
+	public void ShowCard(ActionEvent event) {
+		String[] fields = {"ID"};
+		String[] fieldsHints = {"Card ID"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Show", "Card Info");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			Cards cardManagerInstance = Cards.getCardManagerInstance();
+			try {
+				ArrayList<String> info = cardManagerInstance.show_card_Info(Integer.parseInt(result.get(0)));
+				if(info.isEmpty())
+				{
+					Alerts.createWarningAlert("Card Info", "Wrong Card Serial Number");	
+				}
+				else
+				{
+					int type = Integer.parseInt(info.get(0));
+					if(type == 0)
+					{
+						Alerts.createInfoAlert("Card Info", "Card Serial Number: "+result.get(0),
+								"Card Type:\t\tDebit Card\n"+
+								"Credit:\t\t" + info.get(1)); 
+					}
+					else if(type == 1)
+					{
+						Alerts.createInfoAlert("Card Info", "Card Serial Number: "+result.get(0),
+								"Card Type:\t\tCredit Card\n"+
+								"Payment:\t\t" + info.get(1)+
+								"Spent Credit:\t\t" + info.get(2));
+					}
+				}
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
 
 	public void RemoveCard(ActionEvent event) {
 		String[] fields = {"ID"};

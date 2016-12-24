@@ -50,6 +50,40 @@ public class ManagerController implements Initializable {
 			}
 		}
 	}
+	
+	public void ViewEmployee(ActionEvent event) {
+		String[] fields = {"SSN"};
+		String[] fieldsHints = {"Employee SSN"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "View", "View Employee Info");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			EmpManager empManagerInstance = EmpManager.getEmpManagerInstance();
+			try {
+				ArrayList<String> info = empManagerInstance
+						.viewFromEmployee(result.get(0));
+				if(info.isEmpty())
+				{
+					Alerts.createWarningAlert("Employee Info", "Wrong Employee SSN");
+				}
+				else
+				{
+					Alerts.createInfoAlert(
+							"Employee Info",
+							"Name: " + info.get(3),
+							"SSN:\t\t\t" + info.get(0) + "\n" + 
+							"Job Title:\t\t" + info.get(1) + "\n" + 
+							"Salery:\t\t" + info.get(2) + "\n" + 
+							"Address:\t\t" + info.get(4) + "\n" + 
+							"Birthdate:\t\t" + info.get(5) + "\n" + 
+							"Phone:\t\t" + info.get(6) + "\n" + 
+							"Sex:\t\t\t"	+ info.get(7));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public void LoanRequest(ActionEvent event) {
 		String[] fields = {"SSN", "Balance", "Loan Amount", "Loan Interest Rate"};
