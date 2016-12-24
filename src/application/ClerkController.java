@@ -147,8 +147,8 @@ public class ClerkController implements Initializable {
 	}
 	
 	public void ShowCard(ActionEvent event) {
-		String[] fields = {"ID"};
-		String[] fieldsHints = {"Card ID"};
+		String[] fields = {"Serial Number"};
+		String[] fieldsHints = {"Card Serial Number"};
 		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Show", "Card Info");
 		if(res.isPresent())
 		{
@@ -167,13 +167,13 @@ public class ClerkController implements Initializable {
 					{
 						Alerts.createInfoAlert("Card Info", "Card Serial Number: "+result.get(0),
 								"Card Type:\t\tDebit Card\n"+
-								"Credit:\t\t" + info.get(1)); 
+								"Credit:\t\t\t" + info.get(1)); 
 					}
 					else if(type == 1)
 					{
 						Alerts.createInfoAlert("Card Info", "Card Serial Number: "+result.get(0),
 								"Card Type:\t\tCredit Card\n"+
-								"Payment:\t\t" + info.get(1)+
+								"Payment:\t\t\t" + info.get(1)+ "\n" +
 								"Spent Credit:\t\t" + info.get(2));
 					}
 				}
@@ -187,8 +187,8 @@ public class ClerkController implements Initializable {
 	}
 
 	public void RemoveCard(ActionEvent event) {
-		String[] fields = {"ID"};
-		String[] fieldsHints = {"Card ID"};
+		String[] fields = {"Serial Number"};
+		String[] fieldsHints = {"Card Serial Number"};
 		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Remove", "Remove Card");
 		if(res.isPresent())
 		{

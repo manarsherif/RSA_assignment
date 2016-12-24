@@ -98,12 +98,15 @@ public class Cards{
 			}
 			else if (type == 1)
 			{
-				String Cquery = "SELECT * FROM Credit_Card WHERE DSerialNum =" + cardSerialNumber + ";";
+				String Cquery = "SELECT * FROM Credit_Card WHERE CSerialNum =" + cardSerialNumber + ";";
 				ResultSet C_rs = stmt.executeQuery(Cquery);
+				if (C_rs.next())
+				{
 				float payment = C_rs.getFloat("Payment");
 				float spentCredit = C_rs.getFloat("SpentCredit");
 				info.add(String.valueOf(payment));
 				info.add(String.valueOf(spentCredit));
+				}
 			}
 		}
 		return info;

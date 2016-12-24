@@ -51,6 +51,10 @@ public class ManagerController implements Initializable {
 		}
 	}
 	
+	public void ChangeSalary(ActionEvent event) {
+		
+	}
+	
 	public void ViewEmployee(ActionEvent event) {
 		String[] fields = {"SSN"};
 		String[] fieldsHints = {"Employee SSN"};

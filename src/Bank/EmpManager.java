@@ -128,7 +128,6 @@ public class EmpManager {
 		ResultSet rs = stmt.executeQuery(query);
 
 		ArrayList<String> array = new ArrayList<String>();
-
 		if (rs.next()) {
 			String ssn = rs.getString(EmpTable.EmpSSN);
 			String type = rs.getString(EmpTable.EmpType);
@@ -139,7 +138,7 @@ public class EmpManager {
 			String phone = rs.getString(EmpTable.EmpPhone);
 			String sex = rs.getString(EmpTable.EmpSex);
 			String department = rs.getString(EmpTable.EmpDepartmentID);
-
+			
 			String salery = String.valueOf(s);
 
 			array.add(ssn);
@@ -155,9 +154,21 @@ public class EmpManager {
 		} else {
 			array.clear();
 		}
-
 		return array;
-
 	}
+	
+	public void updateEmployeeSalery(String essn,float esalery) throws SQLException
+	{
+		String query="UPDATE "+EmpTable.EmpTable+
+                     " SET "+EmpTable.EmpSalary+"="+ "'"+esalery+"'"
+					+" WHERE "+EmpTable.EmpSSN+"="+ "'"+essn+"'";
+                                        
+		System.out.println("Salery update is completed");
 
+		try {
+			stmt.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
