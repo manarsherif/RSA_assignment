@@ -120,7 +120,7 @@ public class EmpManager {
 			throws SQLException {
 		String query = "SELECT Ename,ESSN,Ephone FROM Employee where  ESSN IN"
 				+ " (SELECT SupervisorSSN FROM Supervisor,Employee where ESSN = '"
-				+ ESSN + "'" + " AND Ename= '" + inEname + "');";
+				+ ESSN + "'" + " AND Ename= '" + inEname + "' AND EmpSSN=ESSN);";
 		ResultSet rs = stmt.executeQuery(query);
 		ArrayList<ArrayList<String>> array = new ArrayList<>();
 

@@ -121,9 +121,9 @@ public class ManagerController implements Initializable {
 				{
 					String print = "";
 					for (int i = 0; i < array.size(); i++) {
-						print += "Supervisor " + i + ":\n"+
-								"\tSSN:\t\t\t" + array.get(i).get(0) + "\n" + 
-								"\tName:\t\t" + array.get(i).get(1) + "\n" + 
+						print += "Supervisor " + String.valueOf(i+1) + ":\n"+
+								"\tName:\t\t" + array.get(i).get(1) + "\n" +
+								"\tSSN:\t\t\t" + array.get(i).get(0) + "\n" +  
 								"\tPhone:\t\t" + array.get(i).get(2) + "\n"; 
 					}
 					Alerts.createInfoAlert(
