@@ -197,4 +197,31 @@ public class EmpManager {
 		}
 		
 	}
+	public boolean AddSupervisor(String ESSN, String SupSSN) throws SQLException
+	{
+		boolean rs;
+		String query1 = "SELECT Etype FROM Employee where  ESSN = '" + SupSSN + "'";
+                String query2 = "SELECT Etype FROM Employee where  ESSN ='" + ESSN + "'";
+                ResultSet rs1 = stmt.executeQuery(query1);
+                ResultSet rs2 = stmt.executeQuery(query2);
+                if (rs1.next()) {
+                String type1 = rs1.getString(EmpTable.EmpType);
+                          }
+                 if (rs1.next()) {
+                String type2 = rs2.getString(EmpTable.EmpType);
+                          }
+		if (type2 == "Manager" && type1 != "Manager")
+		{
+			
+			rs  = false;
+		}
+		else
+		{
+                String query3= "INSERT INTO Supervisor (SupervisorSSN, EmpSSN) VALUES ('" + SupSSN + "', '" + ESSN + "');";
+                stmt.executeQuery(query3); 
+
+			rs = true;
+		}
+		return rs;
+	}
 }
