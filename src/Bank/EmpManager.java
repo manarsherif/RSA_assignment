@@ -162,9 +162,6 @@ public class EmpManager {
 		String query="UPDATE "+EmpTable.EmpTable+
                      " SET "+EmpTable.EmpSalary+"="+ "'"+esalery+"'"
 					+" WHERE "+EmpTable.EmpSSN+"="+ "'"+essn+"'";
-                                        
-		System.out.println("Salery update is completed");
-
 		try {
 			stmt.execute(query);
 		} catch (SQLException e) {

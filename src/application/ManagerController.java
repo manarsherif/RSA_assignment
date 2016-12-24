@@ -52,7 +52,20 @@ public class ManagerController implements Initializable {
 	}
 	
 	public void ChangeSalary(ActionEvent event) {
-		
+		String[] fields = {"SSN", "New Salary"};
+		String[] fieldsHints = {"Employee SSN", "New Salary"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Update", "Change Salary");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			EmpManager empManagerInstance = EmpManager.getEmpManagerInstance();
+			try {
+				empManagerInstance.updateEmployeeSalery(result.get(0), Float.parseFloat(result.get(1)));
+				Alerts.createInfoAlert("Change Salary", "Employee Salary has been changed successfully");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void ViewEmployee(ActionEvent event) {
@@ -140,6 +153,23 @@ public class ManagerController implements Initializable {
 				ATMs atmManagerInstance = ATMs.getATMsManagerInstance();
 				boolean inBank = result.get(2).equals("Yes");
 				atmManagerInstance.addNewATM(Constants.BANKID, Float.parseFloat(result.get(0)), result.get(1), inBank);
+				Alerts.createInfoAlert("Add ATM", "ATM was added successfully");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void ShowATM(ActionEvent event) {
+		String[] fields = {"ID"};
+		String[] fieldsHints = {"ATM ID"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Show", "ATM Info");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			try {
+				ATMs atmManagerInstance = ATMs.getATMsManagerInstance();
+				atmManagerInstance.show_ATM_Info(Integer.parseInt(result.get(0)));
 				Alerts.createInfoAlert("Add ATM", "ATM was added successfully");
 			} catch (SQLException e) {
 				e.printStackTrace();
