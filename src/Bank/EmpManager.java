@@ -173,15 +173,28 @@ public class EmpManager {
 		return array;
 	}
 	
-	public void updateEmployeeSalery(String essn,float esalery) throws SQLException
+	public boolean updateEmployeeSalery(String essn,float esalery) throws SQLException
 	{
-		String query="UPDATE "+EmpTable.EmpTable+
-                     " SET "+EmpTable.EmpSalary+"="+ "'"+esalery+"'"
-					+" WHERE "+EmpTable.EmpSSN+"="+ "'"+essn+"'";
-		try {
-			stmt.execute(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
+		
+		String q =  "SELECT EmpType FROM Employee WHERE ESSN='" + essn + "'" ;
+		String qq = "SELECT ESSN FROM Employee WHERE ESSN='" + essn + "'";
+		
+		if (qq != essn)
+		{
+			return false;
 		}
+		else if (q == "Manager")
+		{
+			return false;
+		}
+		else 
+		{
+			String query="UPDATE "+EmpTable.EmpTable+
+                    " SET "+EmpTable.EmpSalary+"="+ "'"+esalery+"'"
+					+" WHERE "+EmpTable.EmpSSN+"="+ "'"+essn+"'";
+			
+			return true;
+		}
+		
 	}
 }
