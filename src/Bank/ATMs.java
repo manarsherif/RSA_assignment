@@ -63,6 +63,15 @@ public class ATMs{
 
 		return ATM_IDs;
 	}
+        public int count_ATM() throws SQLException
+        {
+                String query = "SELECT COUNT(*) FROM ATM;";
+                ResultSet rs = stmt.executeQuery(query);
+                rs.next();
+                int count = rs.getInt("COUNT(*)");
+                return count;
+                
+        }
 
 	public boolean removeATM(int ATM_ID) throws SQLException
 	{
@@ -80,18 +89,41 @@ public class ATMs{
 		return rs;
 	}
 
-	public void show_ATM_Info(int ATM_ID) throws SQLException
+	public String[][] show_ATM_Info(int ATM_ID) throws SQLException
 	{
+                int rows  = count_ATM();
+                String[][] ATM_Info = new String[rows][5];
 		if (ATM_ID == -1)
 		{
 			String query = "Select * FROM ATM;" ;
-			stmt.executeQuery(query);         
+			ResultSet rs = stmt.executeQuery(query);
+                        while(rs.next())
+                        {
+                            for (int row = 0; row < rows; row ++)
+                            {
+                                ATM_Info[row][0] = String.valueOf(rs.getInt("ATMID"));
+                                ATM_Info[row][1] = String.valueOf(rs.getInt("CBankID"));
+                                ATM_Info[row][2] = String.valueOf(rs.getInt("ATMcash"));
+                                ATM_Info[row][3] = rs.getString("ATMlocation");
+                                ATM_Info[row][4] = String.valueOf(rs.getInt("InBank"));
+                            }
+                           
+                        }
+                        
+                        
 		}
 		else
 		{
 			String query_ = "Select * FROM ATM WHERE ATM_ID =" + ATM_ID + ";";
-			stmt.executeQuery(query_);
+			ResultSet rs = stmt.executeQuery(query_);
+                        ATM_Info[0][0] = String.valueOf(rs.getInt("ATMID"));
+                        ATM_Info[0][1] = String.valueOf(rs.getInt("CBankID"));
+                        ATM_Info[0][2] = String.valueOf(rs.getInt("ATMcash"));
+                        ATM_Info[0][3] = rs.getString("ATMlocation");
+                        ATM_Info[0][4] = String.valueOf(rs.getInt("InBank"));
+
 		}
+                return ATM_Info;
 	}
 
 };
