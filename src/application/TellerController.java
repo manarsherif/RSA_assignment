@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import Bank.AccountManager;
 import Bank.TransactionsManager;
 import extras.Alerts;
 import extras.Dialogs;
@@ -70,6 +71,34 @@ public class TellerController implements Initializable {
 				else
 				{
 					Alerts.createInfoAlert("Withdraw", "Your current balance is "+balance);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void ViewAccount(ActionEvent event) throws IOException { 
+		String[] fields = {"Account Number"};
+		String[] fieldsHints = {"Account Number"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "View", "View Account Details");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			AccountManager accountManagerInstance = AccountManager.getAccountManagerInstance();
+			try {
+				ArrayList<String> details = accountManagerInstance.viewAccount(Integer.parseInt(result.get(0)));
+				if(details.isEmpty())
+				{
+					Alerts.createWarningAlert("View Account Details", "You entered a non exisiting account");
+				}
+				else
+				{
+					String print = "";
+					for (String detail : details) {
+						print += detail + "\n";
+					}
+					Alerts.createInfoAlert("View Account Details", "Account Details for "+result.get(0), print);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

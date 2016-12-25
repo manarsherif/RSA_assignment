@@ -70,7 +70,6 @@ public class MainController implements Initializable {
 			else
 			{
 				Globals.SessionESSN = pass.getText();
-				// TODO
 				if(type.getValue().equals(Constants.MANAGER))
 				{
 					openWindow("/ManagerWindow.fxml");

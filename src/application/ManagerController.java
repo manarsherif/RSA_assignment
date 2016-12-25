@@ -228,20 +228,46 @@ public class ManagerController implements Initializable {
 		}
 	}
 	
-	public void ShowATM(ActionEvent event) {
+	public void ListATMs(ActionEvent event) {
 		String[] fields = {"ID"};
 		String[] fieldsHints = {"ATM ID"};
-		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Show", "ATM Info");
+		Optional<ArrayList<String>> res = Dialogs.openOptionalDialog(fields, fieldsHints, "View All ATMS", "View ATM", "ATM Details");
 		if(res.isPresent())
 		{
 			ArrayList<String> result = res.get();
 			try {
 				ATMs atmManagerInstance = ATMs.getATMsManagerInstance();
-				atmManagerInstance.show_ATM_Info(Integer.parseInt(result.get(0)));
-				Alerts.createInfoAlert("Add ATM", "ATM was added successfully");
+				String details[][] = atmManagerInstance.show_ATM_Info(Integer.parseInt(result.get(0)));
+				String print = "";
+				for(int i = 0; i < details.length; i++)
+				{
+					if(details[i][0] == null)
+						break;
+					if(details.length > 1)
+						print += "ATM " + String.valueOf(i+1) + ":\n";
+					print += "ATM ID:\t\t" + details[i][0] + "\n";
+					print += "ATM Cash:\t" + details[i][1] + "\n";
+					print += "ATM Loaction:\t" + details[i][2] + "\n";
+					if(details[i][3].equals("0"))
+						print += "ATM In Bank:\t" + "Yes" + "\n\n";
+					else
+						print += "ATM In Bank:\t" + "No" + "\n\n";
+				}
+				if(print.isEmpty())
+				{
+					Alerts.createWarningAlert("ATM Details", "Wrong ATM ID");
+				}
+				else
+				{
+					Alerts.createInfoAlert("ATM Details", "Details", print);
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
+		else
+		{
+			Alerts.createInfoAlert("ATM Details", "Wrong ATM ID");
 		}
 	}
 

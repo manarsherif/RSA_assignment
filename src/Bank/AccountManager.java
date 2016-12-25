@@ -79,35 +79,35 @@ public class AccountManager {
 		ResultSet rs =stmt.executeQuery(query);
 		if(rs.next())
 		{
-			result.add("Account Number: "+ rs.getString("AccNumber"));
-			result.add("Account Balance: "+rs.getString("AccBalance"));
+			result.add("Account Number:\t\t"+ rs.getString("AccNumber"));
+			result.add("Account Balance:\t\t"+rs.getString("AccBalance"));
 			//result.add("Branch"rs.getString("BrID"));
-			result.add("Customer's Social Security Number: "+rs.getString("CSSN"));
-			result.add("Since :"+rs.getString("Since"));
+			result.add("Customer SSN:\t\t\t"+rs.getString("CSSN"));
+			result.add("Since:\t\t\t\t"+rs.getString("Since"));
 			String type =rs.getString("AType");
 			//result.add(type);
 			if(type.equals("1"))//loans acount
 			{
-				result.add("Loans account");
+				result.add("Account Type:\t\t\tLoans account");
 				query="SELECT * FROM Loan WHERE LAccNum ="+Integer.toString(account_number)+" ;";
-				rs=stmt.executeQuery(query);
-				if(rs.next())
+				ResultSet rs1=stmt.executeQuery(query);
+				if(rs1.next())
 				{
-					result.add("Loaan's Id: "+rs.getString("LoanID"));
-					result.add("Loan Amount: "+rs.getString("LAmount"));
-					result.add("Loan's Interest Rate: "+rs.getString("LInterestRate"));
-					result.add("Loan's Due time: "+rs.getString("DueTime"));
+					result.add("Loan Id:\t\t\t\t"+rs1.getString("LoanID"));
+					result.add("Loan Amount:\t\t\t"+rs1.getString("LAmount"));
+					result.add("Loan Interest Rate:\t\t"+rs1.getString("LInterestRate"));
+					result.add("Loan Due time:\t\t"+rs1.getString("DueTime"));
 				}
 			}
 			else //savings account
 			{
-				result.add("Savings Account");
+				result.add("Account Type:\t\t\tSavings Account");
 				query ="SELECT * FROM SavingsAccount WHERE SavingsAccNum ="+
 						Integer.toString(account_number)+";";
-				rs=stmt.executeQuery(query);
-				if(rs.next())
+				ResultSet rs1=stmt.executeQuery(query);
+				if(rs1.next())
 				{
-					result.add("Account's Interest rate: "+rs.getString("SInterestRate"));
+					result.add("Account's Interest rate:\t"+rs1.getString("SInterestRate"));
 				}
 			}
 			

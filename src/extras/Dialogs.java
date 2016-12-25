@@ -114,6 +114,74 @@ public class Dialogs {
 		return result;
 	}
 	
+	public static Optional<ArrayList<String>> openOptionalDialog(String[] fields, String[] fieldsHints, String buttonLabel1, String buttonLabel2, String title) {
+		Dialog<ArrayList<String>> dialog = new Dialog<>();
+		dialog.setTitle(title);
+		ButtonType button1 = new ButtonType(buttonLabel1, ButtonData.OK_DONE);
+		ButtonType button2 = new ButtonType(buttonLabel2, ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(button1, button2, ButtonType.CANCEL);
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(20);
+		grid.setVgap(20);
+		grid.setPadding(new Insets(40, 150, 30, 30));
+		
+		ArrayList<TextField> textFields = new ArrayList<>();
+		int size = fields.length;
+		for(int i = 0; i < size; i++)
+		{
+			textFields.add(new TextField());
+			textFields.get(i).setPromptText(fieldsHints[i]);
+			
+			grid.add(new Label(fields[i]+":"), 0, i);
+			grid.add(textFields.get(i), 1, i);
+		}
+		
+		// Enable/Disable add button depending on whether fields were entered.
+		Node addButton = dialog.getDialogPane().lookupButton(button2);
+		addButton.setDisable(true);
+		
+		for(int i = 0; i < size; i++)
+		{
+			textFields.get(i).textProperty().addListener((observable, oldValue, newValue) -> {
+				addButton.setDisable(false);
+				for(int j = 0; j < size; j++)
+				{
+					if(textFields.get(j).getText().isEmpty())
+					{
+						addButton.setDisable(true);
+					}
+				}
+			});
+		}
+		
+		dialog.getDialogPane().setContent(grid);
+
+		// Request focus on the name field by default.
+		Platform.runLater(() -> textFields.get(0).requestFocus());
+		
+
+		dialog.setResultConverter(dialogButton -> {
+		    if (dialogButton == button2) {
+		    	ArrayList<String> result = new ArrayList<>();
+		    	for(int i = 0; i < size; i++)
+		    	{
+		    		result.add(textFields.get(i).getText());
+		    	}
+		        return result;
+		    }
+		    else if (dialogButton == button1) {
+		    	ArrayList<String> result = new ArrayList<>();
+		    	result.add("-1");
+		    	return result;
+		    }
+		    return null;
+		});
+		
+		Optional<ArrayList<String>> result = dialog.showAndWait();
+		return result;
+	}
+	
 	public static Optional<ArrayList<String>> openUpdateDialog(String[] fields, String[] hints, String[] Choices, String buttonLabel, String title) {
 		Dialog<ArrayList<String>> dialog = new Dialog<>();
 		dialog.setTitle(title);

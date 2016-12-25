@@ -63,15 +63,15 @@ public class ATMs{
 
 		return ATM_IDs;
 	}
-        public int count_ATM() throws SQLException
-        {
-                String query = "SELECT COUNT(*) FROM ATM;";
-                ResultSet rs = stmt.executeQuery(query);
-                rs.next();
-                int count = rs.getInt("COUNT(*)");
-                return count;
-                
-        }
+	public int count_ATM() throws SQLException
+	{
+		String query = "SELECT COUNT(*) FROM ATM;";
+		ResultSet rs = stmt.executeQuery(query);
+		rs.next();
+		int count = rs.getInt("COUNT(*)");
+		return count;
+
+	}
 
 	public boolean removeATM(int ATM_ID) throws SQLException
 	{
@@ -91,39 +91,39 @@ public class ATMs{
 
 	public String[][] show_ATM_Info(int ATM_ID) throws SQLException
 	{
-                int rows  = count_ATM();
-                String[][] ATM_Info = new String[rows][5];
+		
 		if (ATM_ID == -1)
 		{
+			int rows  = count_ATM();
+			String[][] ATM_Info = new String[rows][4];
 			String query = "Select * FROM ATM;" ;
 			ResultSet rs = stmt.executeQuery(query);
-                        while(rs.next())
-                        {
-                            for (int row = 0; row < rows; row ++)
-                            {
-                                ATM_Info[row][0] = String.valueOf(rs.getInt("ATMID"));
-                                ATM_Info[row][1] = String.valueOf(rs.getInt("CBankID"));
-                                ATM_Info[row][2] = String.valueOf(rs.getInt("ATMcash"));
-                                ATM_Info[row][3] = rs.getString("ATMlocation");
-                                ATM_Info[row][4] = String.valueOf(rs.getInt("InBank"));
-                            }
-                           
-                        }
-                        
-                        
+			int row = 0;
+			while(rs.next())
+			{	
+				ATM_Info[row][0] = String.valueOf(rs.getInt("ATMID"));
+				ATM_Info[row][1] = String.valueOf(rs.getInt("ATMcash"));
+				ATM_Info[row][2] = rs.getString("ATMlocation");
+				ATM_Info[row][3] = String.valueOf(rs.getInt("InBank"));
+				row++;
+			}  
+			return ATM_Info;
 		}
 		else
 		{
-			String query_ = "Select * FROM ATM WHERE ATM_ID =" + ATM_ID + ";";
+			String[][] ATM_Info = new String[1][4];
+			String query_ = "Select * FROM ATM WHERE ATMID=" + ATM_ID + ";";
 			ResultSet rs = stmt.executeQuery(query_);
-                        ATM_Info[0][0] = String.valueOf(rs.getInt("ATMID"));
-                        ATM_Info[0][1] = String.valueOf(rs.getInt("CBankID"));
-                        ATM_Info[0][2] = String.valueOf(rs.getInt("ATMcash"));
-                        ATM_Info[0][3] = rs.getString("ATMlocation");
-                        ATM_Info[0][4] = String.valueOf(rs.getInt("InBank"));
-
+			if(rs.next())
+			{
+				ATM_Info[0][0] = String.valueOf(rs.getInt("ATMID"));
+				ATM_Info[0][1] = String.valueOf(rs.getInt("ATMcash"));
+				ATM_Info[0][2] = rs.getString("ATMlocation");
+				ATM_Info[0][3] = String.valueOf(rs.getInt("InBank"));
+			}
+			return ATM_Info;
 		}
-                return ATM_Info;
+		
 	}
 
 }
