@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.mysql.jdbc.PreparedStatement;
@@ -71,5 +72,50 @@ public class AccountManager {
 		return account_number;
 	}
 	
-
+	public ArrayList<String> viewAccount(int account_number) throws SQLException
+	{
+		ArrayList<String> result=new ArrayList<String>();
+		String query="SELECT * FROM Account WHERE AccNumber ="+ Integer.toString(account_number)+";";
+		ResultSet rs =stmt.executeQuery(query);
+		if(rs.next())
+		{
+			result.add("Account Number: "+ rs.getString("AccNumber"));
+			result.add("Account Balance: "+rs.getString("AccBalance"));
+			//result.add("Branch"rs.getString("BrID"));
+			result.add("Customer's Social Security Number: "+rs.getString("CSSN"));
+			result.add("Since :"+rs.getString("Since"));
+			String type =rs.getString("AType");
+			//result.add(type);
+			if(type.equals("1"))//loans acount
+			{
+				result.add("Loans account");
+				query="SELECT * FROM Loan WHERE LAccNum ="+Integer.toString(account_number)+" ;";
+				rs=stmt.executeQuery(query);
+				if(rs.next())
+				{
+					result.add("Loaan's Id: "+rs.getString("LoanID"));
+					result.add("Loan Amount: "+rs.getString("LAmount"));
+					result.add("Loan's Interest Rate: "+rs.getString("LInterestRate"));
+					result.add("Loan's Due time: "+rs.getString("DueTime"));
+				}
+			}
+			else //savings account
+			{
+				result.add("Savings Account");
+				query ="SELECT * FROM SavingsAccount WHERE SavingsAccNum ="+
+						Integer.toString(account_number)+";";
+				rs=stmt.executeQuery(query);
+				if(rs.next())
+				{
+					result.add("Account's Interest rate: "+rs.getString("SInterestRate"));
+				}
+			}
+			
+		}	
+		else// no such account
+		{
+			result.add("-1");
+		}
+		return result;
+	}
 }
