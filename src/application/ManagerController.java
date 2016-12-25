@@ -60,8 +60,15 @@ public class ManagerController implements Initializable {
 			ArrayList<String> result = res.get();
 			EmpManager empManagerInstance = EmpManager.getEmpManagerInstance();
 			try {
-				empManagerInstance.updateEmployeeSalery(result.get(0), Float.parseFloat(result.get(1)));
-				Alerts.createInfoAlert("Change Salary", "Employee Salary has been changed successfully");
+				boolean success = empManagerInstance.updateEmployeeSalery(result.get(0), Float.parseFloat(result.get(1)));
+				if(success)
+				{
+					Alerts.createInfoAlert("Change Salary", "Employee Salary has been changed successfully");
+				}
+				else
+				{
+					Alerts.createWarningAlert("Change Salary", "Wrong Employee SSN");
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -97,6 +104,31 @@ public class ManagerController implements Initializable {
 							"Sex:\t\t\t"	+ info.get(7));
 				}
 			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void AddSupervisor(ActionEvent event) {
+		String[] fields = {"Supervisor SSN", "Employee SSN"};
+		String[] fieldsHints = {"Supervisor SSN", "Employee SSN"};
+		Optional<ArrayList<String>> res = Dialogs.openFieldsDialog(fields, fieldsHints, "", "Add", "Add Supervisor");
+		if(res.isPresent())
+		{
+			ArrayList<String> result = res.get();
+			EmpManager empManagerInstance = EmpManager.getEmpManagerInstance();
+			try {
+				boolean success = empManagerInstance.AddSupervisor(result.get(1), result.get(0));
+				if(success)
+				{
+					Alerts.createInfoAlert("Add Supervisor", "Operation Completed");
+				}
+				else
+				{
+					Alerts.createWarningAlert("Add Supervisor", "Wrong Employee or Supervisor SSN");
+				}
+			} catch (SQLException e) {
+				Alerts.createWarningAlert("Add Supervisor", "Duplicate Entry");
 				e.printStackTrace();
 			}
 		}
