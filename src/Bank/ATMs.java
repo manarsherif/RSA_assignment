@@ -126,4 +126,4 @@ public class ATMs{
                 return ATM_Info;
 	}
 
-};
+}
