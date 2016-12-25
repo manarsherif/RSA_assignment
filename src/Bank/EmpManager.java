@@ -154,7 +154,7 @@ public class EmpManager {
 			String phone = rs.getString(EmpTable.EmpPhone);
 			String sex = rs.getString(EmpTable.EmpSex);
 			String department = rs.getString(EmpTable.EmpDepartmentID);
-			
+
 			String salery = String.valueOf(s);
 
 			array.add(ssn);
@@ -172,63 +172,70 @@ public class EmpManager {
 		}
 		return array;
 	}
-	
+
 	public boolean updateEmployeeSalery(String essn,float esalery) throws SQLException
 	{
-		
-		String q =  "SELECT EmpType FROM Employee WHERE ESSN='" + essn + "'" ;
-		String qq = "SELECT ESSN FROM Employee WHERE ESSN='" + essn + "'";
+		String q =  "SELECT EType FROM Employee WHERE ESSN='" + essn + "'" ;
 		ResultSet rs = stmt.executeQuery(q);
-		ResultSet r = stmt.executeQuery(qq);
-		
-		String ssn = String.valueOf(r);
-		String type = String.valueOf(rs);
-		
-		if (!ssn.equals(essn))
+		if(rs.next())
 		{
-			return false;
-		}
-		else if (type.equals("Manager"))
-		{
-			return false;
-		}
-		else 
-		{
-			String query="UPDATE "+EmpTable.EmpTable+
-                    " SET "+EmpTable.EmpSalary+"="+ "'"+esalery+"'"
-					+" WHERE "+EmpTable.EmpSSN+"="+ "'"+essn+"'";
-			
-			ResultSet t = stmt.executeQuery(query);
-			
-			return true;
-		}
-		
-	}
-	public boolean AddSupervisor(String ESSN, String SupSSN) throws SQLException
-	{
-		boolean rs;
-		String query1 = "SELECT Etype FROM Employee where  ESSN = '" + SupSSN + "'";
-                String query2 = "SELECT Etype FROM Employee where  ESSN ='" + ESSN + "'";
-                ResultSet rs1 = stmt.executeQuery(query1);
-                ResultSet rs2 = stmt.executeQuery(query2);
-                if (rs1.next()) {
-                String type1 = rs1.getString(EmpTable.EmpType);
-                          }
-                 if (rs1.next()) {
-                String type2 = rs2.getString(EmpTable.EmpType);
-                          }
-		if (type2 == "Manager" && type1 != "Manager")
-		{
-			
-			rs  = false;
+			String type = rs.getString("EType");
+			if (type.equals("Manager"))
+			{
+				return false;
+			}
+			else 
+			{
+				String query="UPDATE "+EmpTable.EmpTable+
+						" SET "+EmpTable.EmpSalary+"="+ "'"+esalery+"'"
+						+" WHERE "+EmpTable.EmpSSN+"="+ "'"+essn+"'";
+				stmt.execute(query);
+				return true;
+			}
 		}
 		else
 		{
-                String query3= "INSERT INTO Supervisor (SupervisorSSN, EmpSSN) VALUES ('" + SupSSN + "', '" + ESSN + "');";
-                stmt.executeQuery(query3); 
-
-			rs = true;
+			return false;
 		}
-		return rs;
+	}
+	public boolean AddSupervisor(String ESSN, String SupSSN) throws SQLException
+	{
+		String query1 = "SELECT Etype FROM Employee WHERE  ESSN='" + SupSSN + "'";
+		String query2 = "SELECT Etype FROM Employee WHERE  ESSN='" + ESSN + "'";
+		ResultSet rs1 = stmt.executeQuery(query1);
+		String type1 = "";
+		String type2 = "";
+		if(ESSN.equals(SupSSN))
+		{
+			return false;
+		}
+		if (rs1.next()) 
+		{
+			type1 = rs1.getString(EmpTable.EmpType);
+		}
+		else
+		{
+			return false;
+		}
+		ResultSet rs2 = stmt.executeQuery(query2);
+		if(rs2.next())
+		{
+			type2 = rs2.getString(EmpTable.EmpType);
+			if (type2.equals("Manager") && !type1.equals("Manager"))
+			{
+				return false;
+			}
+			else
+			{
+				String query3= "INSERT INTO Supervisor (SupervisorSSN, EmpSSN) VALUES ('" + SupSSN + "', '" + ESSN + "');";
+				stmt.execute(query3); 
+				return true;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
+
